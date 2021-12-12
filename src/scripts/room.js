@@ -101,7 +101,7 @@ async function connectThePeers() {
 
     //start process
     if (peerConnection == null) { return -1 };
-    if (im_user_1 == true && user1_offer == null && connection_completed == false) {
+    if (im_user_1 == true && !user1_offer && connection_completed == false) {
         //User 1 - creates an offer
         console.log('creating offer')
         await createOffer_user1(updateMatchInfo_req);
@@ -137,6 +137,7 @@ await connectThePeers();
 
 //WebRTC Functions
 async function createOffer_user1(callback) {
+    console.log("createOffer_user1 FUNCTION")
     dataChannel = peerConnection.createDataChannel('channel1');
     dataChannel.onmessage = e => console.log('Got a message: ' + e.data);
     dataChannel.onopen = e => console.log('Connection opened');
@@ -186,6 +187,7 @@ async function readMyMatchInfo_req() {
     return response.json();
 }
 async function updateMatchInfo_req(data) {
+    console.log('PUTing Match Info')
     const response = await fetch(`${serverURL_rooms}/match/${the_match_id}`, {
         method: 'PUT',
         headers: headers,
@@ -199,7 +201,7 @@ async function deleteMatchInfo_req() {
         method: 'DELETE',
         headers: headers,
     });
-    return response.json();
+    return response;
 };
 
 
