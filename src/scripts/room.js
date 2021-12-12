@@ -131,7 +131,7 @@ async function processAnswerWhenReady_user1() {
         setTimeout(async function() {
             console.log('staring processAnswerWhenReady_user1 again')
             await processAnswerWhenReady_user1()
-        },2000)
+        },1000)
     }
     return -1;
 
@@ -148,7 +148,7 @@ async function processOfferWhenReady_user2() {
         setTimeout(async function() {
             console.log('staring processOfferWhenReady_user2 again')
             await processOfferWhenReady_user2()
-        },2000)
+        },1000)
     }
     return -1;
 
