@@ -16,9 +16,11 @@ const topic1_btn = document.getElementById('js-topic1-button');
 //Listen to the Button for Topic 1
 topic1_btn.addEventListener("click", async (e) => {
     const userId = window.localStorage.userId;
+    console.log('Topic: '+ e.srcElement.getAttribute('topic'))
     const data = {
         userId: userId,
         topic: e.srcElement.getAttribute('topic'),
+        test:"test"
     }
     createParticipant_req(data).then(()=>{
         findMatch(userId);
@@ -41,6 +43,7 @@ async function findMatch(the_userId) {
 
 //Requests
 async function createParticipant_req(data) {
+    console.log("posting")
     const response = await fetch(`${serverURL_rooms}/participant`, {
         method: 'POST',
         headers: headers,
