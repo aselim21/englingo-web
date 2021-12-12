@@ -46,8 +46,7 @@ finish_call_btn.addEventListener("click", async (e) => {
 });
 
 let dataChannel;
-let im_user_1 = false;
-let im_user_2 = false;
+
 const localVideo = document.getElementById('webcamVideo');
 const remoteVideo = document.getElementById('remoteVideo');
 
@@ -88,78 +87,120 @@ async function startMediaSharing() {
 }
 await startMediaSharing();
 
-//Main Function to connect the peers
-async function connectThePeers() {
-    const matchInfo = await readMyMatchInfo_req();
+//--------------------------------------------------------------------------------------
+const matchInfo = await readMyMatchInfo_req();
 
-    //save received info
-    if (the_userId == matchInfo.user1_id) im_user_1 = true;
-    if (the_userId == matchInfo.user2_id) im_user_2 = true;
-    let user1_offer = matchInfo.user1_offer;
-    let user2_answer = matchInfo.user2_answer;
-    let connection_completed = matchInfo.connection_completed;
-
-    //start process
-    if (peerConnection == null) { return -1 };
-    if (im_user_1 == true && !user1_offer && user2_answer == null && connection_completed == false) {
-        //User 1 - creates an offer
-        console.log('creating an offer')
-        await createOffer_user1(updateMatchInfo_req);
-
-    } else if (im_user_2 == true && user1_offer != null && !user2_answer && connection_completed == false) {
-        //User2 - receives the offer and creates an answer
-        console.log('creating answer and connecting')
-        await createAnswerAndConnect_user2(user1_offer, updateMatchInfo_req);
-        return 0;
-
-    } else if (im_user_1 == true && !user1_offer && user2_answer != null && connection_completed == false) {
-        //User1 - receives the answer and users are connected
-        console.log('connection completed')
-        await connectToPeer_user1(user2_answer);
-        const data = {
-            connection_completed: true
-        }
-        connection_completed = true;
-        await updateMatchInfo_req(data);
-    }
-
-    if (connection_completed == true) {
-        //When users are connected, delete this match
-        deleteMatchInfo_req();
-        return 0;
-    } else {
-        await connectThePeers();
-    }
+if (the_userId == matchInfo.user1_id) {
+    console.log('User1-creating an offer');
+    await createOffer_user1(updateMatchInfo_req);
+    processAnswerWhenReady_user1();
 }
-await connectThePeers();
+
+if (the_userId == matchInfo.user2_id) {
+    processOfferWhenReady_user2();
+}
+
+
+//Main Function to connect the peers
+// async function connectThePeers() {
+//     const matchInfo = await readMyMatchInfo_req();
+
+//     //save received info
+//     if (the_userId == matchInfo.user1_id) im_user_1 = true;
+//     if (the_userId == matchInfo.user2_id) im_user_2 = true;
+//     let user1_offer = matchInfo.user1_offer;
+//     let user2_answer = matchInfo.user2_answer;
+//     let connection_completed = matchInfo.connection_completed;
+
+//     //start process
+//     if (peerConnection == null) { return -1 };
+//     if (im_user_1 == true && !user1_offer && user2_answer == null && connection_completed == false) {
+//         //User 1 - creates an offer
+//         console.log('creating an offer');
+//         await createOffer_user1(updateMatchInfo_req);
+
+//     } else if (im_user_2 == true && user1_offer != null && !user2_answer && connection_completed == false) {
+//         //User2 - receives the offer and creates an answer
+//         console.log('creating answer and connecting')
+//         await createAnswerAndConnect_user2(user1_offer, updateMatchInfo_req);
+//         return 0;
+
+//     } else if (im_user_1 == true && !user1_offer && user2_answer != null && connection_completed == false) {
+//         //User1 - receives the answer and users are connected
+//         console.log('connection completed')
+//         await connectToPeer_user1(user2_answer);
+//         const data = {
+//             connection_completed: true
+//         }
+//         connection_completed = true;
+//         await updateMatchInfo_req(data);
+//     }
+
+//     if (connection_completed == true) {
+//         //When users are connected, delete this match
+//         deleteMatchInfo_req();
+//         return 0;
+//     } else {
+//         await connectThePeers();
+//     }
+// }
+// await connectThePeers();
+
 
 
 
 //WebRTC Functions
+//~~~~~~~~~~~refactored~~~~~~~~~~~
 async function createOffer_user1(callback) {
-    console.log("createOffer_user1 FUNCTION")
+    console.log("in createOffer_user1")
     dataChannel = peerConnection.createDataChannel('channel1');
     dataChannel.onmessage = e => console.log('Got a message: ' + e.data);
     dataChannel.onopen = e => console.log('Connection opened');
     peerConnection.onicecandidate = function (e) {
         console.log("ICE candidate (peerConnection)", e);
-        if (e.candidate == null) {
-            console.log("ice candidate", peerConnection.localDescription);
-            callback({ user1_offer: peerConnection.localDescription });
-        }
     };
-    // setTimeout(()=>{
-    //     console.log('Timeout ready for callback');
-    //     callback({ user1_offer: peerConnection.localDescription });
-    // },2000)
+    setTimeout(()=>{
+        console.log('PUT OFFER');
+        callback({ user1_offer: peerConnection.localDescription });
+    },2000)
     const offer = await peerConnection.createOffer(offerOptions);
     await peerConnection.setLocalDescription(offer);
     return offer;
 }
+//~~~~~~~~~~~refactored~~~~~~~~~~~
+async function processAnswerWhenReady_user1() {
+    console.log('in processAnswerWhenReady_user1');
+    const matchInfo = await readMyMatchInfo_req();
+    const user2_answer = matchInfo.user2_answer;
+    if(user2_answer){
+        const remoteDesc = new RTCSessionDescription(user2_answer);
+        await peerConnection.setRemoteDescription(remoteDesc);
+        return 0;
+    }else{
+        setTimeout(async function() {
+            console.log('staring processAnswerWhenReady_user1 again')
+            await processAnswerWhenReady_user1()
+        },2000)
+    }
+    return -1;
 
-async function connectToPeer_user1(answer) {
-    const remoteDesc = new RTCSessionDescription(answer);
-    await peerConnection.setRemoteDescription(remoteDesc);
+}
+//~~~~~~~~~~~refactored~~~~~~~~~~~
+async function processOfferWhenReady_user2() {
+    console.log('in processOfferWhenReady_user2');
+    const matchInfo = await readMyMatchInfo_req();
+    const user1_offer = matchInfo.user1_offer;
+    if(user1_offer){
+        await createAnswerAndConnect_user2(user1_offer, updateMatchInfo_req);
+        return 0;
+    }else{
+        setTimeout(async function() {
+            console.log('staring processOfferWhenReady_user2 again')
+            await processOfferWhenReady_user2()
+        },2000)
+    }
+    return -1;
+
 }
 
 async function createAnswerAndConnect_user2(offer, callback) {
@@ -170,10 +211,10 @@ async function createAnswerAndConnect_user2(offer, callback) {
     });
     peerConnection.onicecandidate = function (e) {
         console.log("ICE candidate (peerConnection)", e);
-        if (e.candidate == null) {
-            console.log("ice candidate", peerConnection.localDescription);
+        setTimeout(()=>{
+            console.log("PUT ANSWER");
             callback({ user2_answer: peerConnection.localDescription });
-        }
+        },2000)
     };
     const remoteDesc = new RTCSessionDescription(offer);
     await peerConnection.setRemoteDescription(remoteDesc);
@@ -184,6 +225,7 @@ async function createAnswerAndConnect_user2(offer, callback) {
 
 //Requests
 async function readMyMatchInfo_req() {
+    console.log('in readMyMatchInfo_req');
     const response = await fetch(`${serverURL_rooms}/match/${the_match_id}`, {
         method: 'GET',
         headers: headers,
@@ -191,7 +233,7 @@ async function readMyMatchInfo_req() {
     return response.json();
 }
 async function updateMatchInfo_req(data) {
-    console.log('PUTing Match Info')
+    console.log('in updateMatchInfo_req')
     const response = await fetch(`${serverURL_rooms}/match/${the_match_id}`, {
         method: 'PUT',
         headers: headers,
