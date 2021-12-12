@@ -10,11 +10,11 @@ const the_match_id = window.location.pathname.slice(7);
 const the_userId = window.localStorage.userId;
 const configuration = {
     offerToReceiveAudio: true,
-    offerToReceiveVideo: true
+    offerToReceiveVideo: false
 }
 const offerOptions = {
     offerToReceiveAudio: 1,
-    offerToReceiveVideo: 1
+    offerToReceiveVideo: 0
 };
 
 let peerConnection = new RTCPeerConnection({ configuration: configuration, iceServers: [{ 'urls': 'stun:stun.l.google.com:19302' }] });
@@ -47,42 +47,29 @@ finish_call_btn.addEventListener("click", async (e) => {
 
 let dataChannel;
 
-const localVideo = document.getElementById('webcamVideo');
-const remoteVideo = document.getElementById('remoteVideo');
-
-//Event-Listeners for the videos
-localVideo.addEventListener('loadedmetadata', function () {
-    console.log(`Local video videoWidth: ${this.videoWidth}px,  videoHeight: ${this.videoHeight}px`);
-});
-
-remoteVideo.addEventListener('loadedmetadata', function () {
-    console.log(`Remote video videoWidth: ${this.videoWidth}px,  videoHeight: ${this.videoHeight}px`);
-});
-
+// const localVideo = document.getElementById('webcamVideo');
+const remoteAudio = document.getElementById('remoteAudio');
 
 //1. First start sharing media
 
 async function startMediaSharing() {
 
-    const mediaConstraints_toSend = { audio: true, video: true };
-    const mediaConstraints_toDisplay = { audio: false, video: true };
+    const mediaConstraints_toSend = { audio: true, video: false };
 
     let localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints_toSend);
-    let localStream_toDisplay = await navigator.mediaDevices.getUserMedia(mediaConstraints_toDisplay);
     let remoteStream = new MediaStream();
 
     localStream.getTracks().forEach((track) => {
         console.log("tracks sent");
         peerConnection.addTrack(track, localStream);
     });
-    localVideo.srcObject = localStream_toDisplay;
 
     peerConnection.ontrack = function (event) {
         console.log('track received');
         event.streams[0].getTracks().forEach(track => {
             remoteStream.addTrack(track);
         })
-        remoteVideo.srcObject = remoteStream;
+        remoteAudio.srcObject = remoteStream;
     }
 }
 await startMediaSharing();
