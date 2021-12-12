@@ -144,14 +144,13 @@ async function processOfferWhenReady_user2() {
     setTimeout(async function () {
         const matchInfo = await readMyMatchInfo_req();
         const user1_offer = matchInfo.user1_offer;
-        if (user1_offer) {
+        const user2_answer = matchInfo.user2_answer;
+        if (user1_offer && !user2_answer) {
             await createAnswerAndConnect_user2(user1_offer, updateMatchInfo_req);
             return 0;
         } else {
-
             console.log('staring processOfferWhenReady_user2 again')
             await processOfferWhenReady_user2()
-
         }
     }, 1000)
     return -1;
