@@ -1,9 +1,9 @@
+//npm run devStart
 const express = require('express');
 const app = express();
 const path = require('path');
 app.use(express.json());
 app.use(express.static("src"));
-const { v4: uuidv4 } = require("uuid");
 const PORT = process.env.PORT || 3000;
 
 app.use((req, res, next) => {
@@ -41,5 +41,5 @@ app.get('/room/:roomId', (req, res) => {
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~ run server ~~~~~~~~~~~~~~~~~~~~~~~~~
 app.listen(PORT, () => {
-  console.log(`Express server listening on port ${PORT}`);
+  console.log(`Express server listening on port ${PORT}...`);
 });
