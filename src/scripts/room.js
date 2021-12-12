@@ -143,11 +143,15 @@ async function createOffer_user1(callback) {
     dataChannel.onopen = e => console.log('Connection opened');
     peerConnection.onicecandidate = function (e) {
         console.log("ICE candidate (peerConnection)", e);
-        if (e.candidate == null) {
-            console.log("ice candidate", peerConnection.localDescription);
-            callback({ user1_offer: peerConnection.localDescription });
-        }
+        // if (e.candidate == null) {
+        //     console.log("ice candidate", peerConnection.localDescription);
+        //     callback({ user1_offer: peerConnection.localDescription });
+        // }
     };
+    setTimeout(()=>{
+        console.log('Timeout ready for callback');
+        callback({ user1_offer: peerConnection.localDescription });
+    },2000)
     const offer = await peerConnection.createOffer(offerOptions);
     await peerConnection.setLocalDescription(offer);
     return offer;
