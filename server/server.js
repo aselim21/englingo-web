@@ -30,12 +30,12 @@ app.get('/home', (req, res) => {
   res.sendFile(path.join(__dirname, '../src', 'index.html'));
 });
 
-app.get('/room', (req, res) => {
+app.get('/rooms', (req, res) => {
     res.send("You need a roomId");
 //   res.sendFile(path.join(__dirname, '../src', 'room.html'));
 });
 
-app.get('/room/:roomId', (req, res) => {
+app.get('/rooms/:roomId', (req, res) => {
   res.sendFile(path.join(__dirname, '../src', 'room.html'));
 });
 

@@ -16,7 +16,6 @@ const topic1_btn = document.getElementById('js-topic1-button');
 //Listen to the Button for Topic 1
 topic1_btn.addEventListener("click", async (e) => {
     const userId = window.localStorage.userId;
-    console.log('Topic: '+ e.srcElement.getAttribute('topic'))
     const data = {
         userId: userId,
         topic: e.srcElement.getAttribute('topic'),
@@ -37,19 +36,17 @@ async function findMatch(the_userId) {
             await findMatch(the_userId);
         }, 5000)
     } else {
-        window.location.assign(`/room/${match_id}`);
+        window.location.assign(`/rooms/${match_id}`);
     }
 }
 
 //Requests
 async function createParticipant_req(data) {
-    console.log("posting")
     const response = await fetch(`${serverURL_rooms}/participant`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
     });
-    console.log(response)
     return response;
 }
 
