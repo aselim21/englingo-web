@@ -170,7 +170,6 @@ async function createOffer_user1(callback) {
 //~~~~~~~~~~~refactored~~~~~~~~~~~
 async function processAnswerWhenReady_user1() {
     console.log('in processAnswerWhenReady_user1');
-    setTimeout(async function() {
     const matchInfo = await readMyMatchInfo_req();
     const user2_answer = matchInfo.user2_answer;
     if(user2_answer){
@@ -178,31 +177,28 @@ async function processAnswerWhenReady_user1() {
         await peerConnection.setRemoteDescription(remoteDesc);
         return 0;
     }else{
-        
+        setTimeout(async function() {
             console.log('staring processAnswerWhenReady_user1 again')
             await processAnswerWhenReady_user1()
-       
-    } 
-},2000)
+        },2000)
+    }
     return -1;
 
 }
 //~~~~~~~~~~~refactored~~~~~~~~~~~
 async function processOfferWhenReady_user2() {
     console.log('in processOfferWhenReady_user2');
-    setTimeout(async function() {
     const matchInfo = await readMyMatchInfo_req();
     const user1_offer = matchInfo.user1_offer;
     if(user1_offer){
         await createAnswerAndConnect_user2(user1_offer, updateMatchInfo_req);
         return 0;
     }else{
-        
+        setTimeout(async function() {
             console.log('staring processOfferWhenReady_user2 again')
             await processOfferWhenReady_user2()
-      
-    } 
- },2000)
+        },2000)
+    }
     return -1;
 
 }
