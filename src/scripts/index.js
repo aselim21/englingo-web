@@ -54,7 +54,7 @@ async function createParticipant_req(data) {
 }
 
 async function readMatchID_req(the_userId) {
-    const response = await fetch(`${serverURL_rooms}/match/participant/${the_userId}`, {
+    const response = await fetch(`${serverURL_rooms}/matches/participants/${the_userId}`, {
         method: 'GET',
         headers: headers
     });

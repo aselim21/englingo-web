@@ -226,7 +226,7 @@ async function createAnswerAndConnect_user2(offer, callback) {
 //Requests
 async function readMyMatchInfo_req() {
     console.log('in readMyMatchInfo_req');
-    const response = await fetch(`${serverURL_rooms}/match/${the_match_id}`, {
+    const response = await fetch(`${serverURL_rooms}/matches/${the_match_id}`, {
         method: 'GET',
         headers: headers,
     });
@@ -234,7 +234,7 @@ async function readMyMatchInfo_req() {
 }
 async function updateMatchInfo_req(data) {
     console.log('in updateMatchInfo_req')
-    const response = await fetch(`${serverURL_rooms}/match/${the_match_id}`, {
+    const response = await fetch(`${serverURL_rooms}/matches/${the_match_id}`, {
         method: 'PUT',
         headers: headers,
         body: JSON.stringify(data)
@@ -243,7 +243,7 @@ async function updateMatchInfo_req(data) {
 };
 
 async function deleteMatchInfo_req() {
-    const response = await fetch(`${serverURL_rooms}/match/${the_match_id}`, {
+    const response = await fetch(`${serverURL_rooms}/matches/${the_match_id}`, {
         method: 'DELETE',
         headers: headers,
     });
