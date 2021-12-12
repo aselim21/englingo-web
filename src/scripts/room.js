@@ -188,7 +188,7 @@ async function processAnswerWhenReady_user1() {
 //~~~~~~~~~~~refactored~~~~~~~~~~~
 async function processOfferWhenReady_user2() {
     console.log('in processOfferWhenReady_user2');
-    setTimeout(() => {
+    setTimeout(async function () {
         let matchInfo = await readMyMatchInfo_req();
         const user1_offer = matchInfo.user1_offer;
         if (user1_offer) {
