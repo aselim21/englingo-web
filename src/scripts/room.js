@@ -26,7 +26,7 @@ peerConnection.onconnectionstatechange = function (event) {
 
 setTimeout(() => {
     if (peerConnection.connectionState != 'connected') {
-    alert("Your match left.");
+        alert("Your match left.");
         deleteMatchInfo_req();
         closeVideoCall();
     }
@@ -159,10 +159,10 @@ async function createOffer_user1(callback) {
     peerConnection.onicecandidate = function (e) {
         console.log("ICE candidate (peerConnection)", e);
     };
-    setTimeout(()=>{
+    setTimeout(() => {
         console.log('PUT OFFER');
         callback({ user1_offer: peerConnection.localDescription });
-    },2000)
+    }, 2000)
     const offer = await peerConnection.createOffer(offerOptions);
     await peerConnection.setLocalDescription(offer);
     return offer;
@@ -170,35 +170,36 @@ async function createOffer_user1(callback) {
 //~~~~~~~~~~~refactored~~~~~~~~~~~
 async function processAnswerWhenReady_user1() {
     console.log('in processAnswerWhenReady_user1');
-    const matchInfo = await readMyMatchInfo_req();
-    const user2_answer = matchInfo.user2_answer;
-    if(user2_answer){
-        const remoteDesc = new RTCSessionDescription(user2_answer);
-        await peerConnection.setRemoteDescription(remoteDesc);
-        return 0;
-    }else{
-        setTimeout(async function() {
+    setTimeout(async function () {
+        const matchInfo = await readMyMatchInfo_req();
+        const user2_answer = matchInfo.user2_answer;
+        if (user2_answer) {
+            const remoteDesc = new RTCSessionDescription(user2_answer);
+            await peerConnection.setRemoteDescription(remoteDesc);
+            return 0;
+        } else {
             console.log('staring processAnswerWhenReady_user1 again')
             await processAnswerWhenReady_user1()
-        },2000)
-    }
+        }
+    }, 2000)
     return -1;
 
 }
 //~~~~~~~~~~~refactored~~~~~~~~~~~
 async function processOfferWhenReady_user2() {
     console.log('in processOfferWhenReady_user2');
-    const matchInfo = await readMyMatchInfo_req();
-    const user1_offer = matchInfo.user1_offer;
-    if(user1_offer){
-        await createAnswerAndConnect_user2(user1_offer, updateMatchInfo_req);
-        return 0;
-    }else{
-        setTimeout(async function() {
+    setTimeout(() => {
+        const matchInfo = await readMyMatchInfo_req();
+        const user1_offer = matchInfo.user1_offer;
+        if (user1_offer) {
+            await createAnswerAndConnect_user2(user1_offer, updateMatchInfo_req);
+            return 0;
+        } else {
             console.log('staring processOfferWhenReady_user2 again')
-            await processOfferWhenReady_user2()
-        },2000)
-    }
+            await processOfferWhenReady_user2();
+        }
+    }, 2000)
+
     return -1;
 
 }
@@ -211,10 +212,10 @@ async function createAnswerAndConnect_user2(offer, callback) {
     });
     peerConnection.onicecandidate = function (e) {
         console.log("ICE candidate (peerConnection)", e);
-        setTimeout(()=>{
+        setTimeout(() => {
             console.log("PUT ANSWER");
             callback({ user2_answer: peerConnection.localDescription });
-        },2000)
+        }, 2000)
     };
     const remoteDesc = new RTCSessionDescription(offer);
     await peerConnection.setRemoteDescription(remoteDesc);
