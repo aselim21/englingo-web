@@ -6,7 +6,7 @@ headers.append('Accept', 'application/json');
 headers.append("Access-Control-Allow-Credentials", "true");
 headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Credentials, Cookie, Set-Cookie, Authorization');
 headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
-const the_match_id = window.location.pathname.slice(6);
+const the_match_id = window.location.pathname.slice(7);
 const the_userId = window.localStorage.userId;
 const configuration = {
     offerToReceiveAudio: true,
@@ -99,55 +99,6 @@ if (the_userId == matchInfo.user1_id) {
 if (the_userId == matchInfo.user2_id) {
     processOfferWhenReady_user2();
 }
-
-
-//Main Function to connect the peers
-// async function connectThePeers() {
-//     const matchInfo = await readMyMatchInfo_req();
-
-//     //save received info
-//     if (the_userId == matchInfo.user1_id) im_user_1 = true;
-//     if (the_userId == matchInfo.user2_id) im_user_2 = true;
-//     let user1_offer = matchInfo.user1_offer;
-//     let user2_answer = matchInfo.user2_answer;
-//     let connection_completed = matchInfo.connection_completed;
-
-//     //start process
-//     if (peerConnection == null) { return -1 };
-//     if (im_user_1 == true && !user1_offer && user2_answer == null && connection_completed == false) {
-//         //User 1 - creates an offer
-//         console.log('creating an offer');
-//         await createOffer_user1(updateMatchInfo_req);
-
-//     } else if (im_user_2 == true && user1_offer != null && !user2_answer && connection_completed == false) {
-//         //User2 - receives the offer and creates an answer
-//         console.log('creating answer and connecting')
-//         await createAnswerAndConnect_user2(user1_offer, updateMatchInfo_req);
-//         return 0;
-
-//     } else if (im_user_1 == true && !user1_offer && user2_answer != null && connection_completed == false) {
-//         //User1 - receives the answer and users are connected
-//         console.log('connection completed')
-//         await connectToPeer_user1(user2_answer);
-//         const data = {
-//             connection_completed: true
-//         }
-//         connection_completed = true;
-//         await updateMatchInfo_req(data);
-//     }
-
-//     if (connection_completed == true) {
-//         //When users are connected, delete this match
-//         deleteMatchInfo_req();
-//         return 0;
-//     } else {
-//         await connectThePeers();
-//     }
-// }
-// await connectThePeers();
-
-
-
 
 //WebRTC Functions
 //~~~~~~~~~~~refactored~~~~~~~~~~~
