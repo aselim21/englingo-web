@@ -41,12 +41,13 @@ async function findMatch(the_userId) {
 
 //Requests
 async function createParticipant_req(data) {
-    const response = await fetch(`${serverURL_rooms}/participant]`, {
+    const response = await fetch(`${serverURL_rooms}/participant`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
     });
-    return response.json();
+    console.log(response)
+    return response;
 }
 
 async function readMatchID_req(the_userId) {
