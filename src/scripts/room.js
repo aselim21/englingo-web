@@ -126,6 +126,7 @@ async function processAnswerWhenReady_user1() {
     if(user2_answer){
         const remoteDesc = new RTCSessionDescription(user2_answer);
         await peerConnection.setRemoteDescription(remoteDesc);
+        await deleteMatchInfo_req();
         return 0;
     }else{
         setTimeout(async function() {
@@ -134,7 +135,6 @@ async function processAnswerWhenReady_user1() {
         },1000)
     }
     return -1;
-
 }
 //~~~~~~~~~~~refactored~~~~~~~~~~~
 async function processOfferWhenReady_user2() {
