@@ -171,7 +171,7 @@ async function createOffer_user1(callback) {
 async function processAnswerWhenReady_user1() {
     console.log('in processAnswerWhenReady_user1');
     setTimeout(async function () {
-        const matchInfo = await readMyMatchInfo_req();
+        let matchInfo = await readMyMatchInfo_req();
         const user2_answer = matchInfo.user2_answer;
         if (user2_answer) {
             const remoteDesc = new RTCSessionDescription(user2_answer);
@@ -189,7 +189,7 @@ async function processAnswerWhenReady_user1() {
 async function processOfferWhenReady_user2() {
     console.log('in processOfferWhenReady_user2');
     setTimeout(() => {
-        const matchInfo = await readMyMatchInfo_req();
+        let matchInfo = await readMyMatchInfo_req();
         const user1_offer = matchInfo.user1_offer;
         if (user1_offer) {
             await createAnswerAndConnect_user2(user1_offer, updateMatchInfo_req);
