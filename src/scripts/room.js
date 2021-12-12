@@ -101,18 +101,18 @@ async function connectThePeers() {
 
     //start process
     if (peerConnection == null) { return -1 };
-    if (im_user_1 == true && !user1_offer && connection_completed == false) {
+    if (im_user_1 == true && !user1_offer && user2_answer == null && connection_completed == false) {
         //User 1 - creates an offer
-        console.log('creating offer')
+        console.log('creating an offer')
         await createOffer_user1(updateMatchInfo_req);
 
-    } else if (im_user_2 == true && user1_offer != null && user2_answer == null && connection_completed == false) {
+    } else if (im_user_2 == true && user1_offer != null && !user2_answer && connection_completed == false) {
         //User2 - receives the offer and creates an answer
         console.log('creating answer and connecting')
         await createAnswerAndConnect_user2(user1_offer, updateMatchInfo_req);
         return 0;
 
-    } else if (im_user_1 == true && user2_answer != null && connection_completed == false) {
+    } else if (im_user_1 == true && !user1_offer && user2_answer != null && connection_completed == false) {
         //User1 - receives the answer and users are connected
         console.log('connection completed')
         await connectToPeer_user1(user2_answer);
@@ -143,15 +143,15 @@ async function createOffer_user1(callback) {
     dataChannel.onopen = e => console.log('Connection opened');
     peerConnection.onicecandidate = function (e) {
         console.log("ICE candidate (peerConnection)", e);
-        // if (e.candidate == null) {
-        //     console.log("ice candidate", peerConnection.localDescription);
-        //     callback({ user1_offer: peerConnection.localDescription });
-        // }
+        if (e.candidate == null) {
+            console.log("ice candidate", peerConnection.localDescription);
+            callback({ user1_offer: peerConnection.localDescription });
+        }
     };
-    setTimeout(()=>{
-        console.log('Timeout ready for callback');
-        callback({ user1_offer: peerConnection.localDescription });
-    },2000)
+    // setTimeout(()=>{
+    //     console.log('Timeout ready for callback');
+    //     callback({ user1_offer: peerConnection.localDescription });
+    // },2000)
     const offer = await peerConnection.createOffer(offerOptions);
     await peerConnection.setLocalDescription(offer);
     return offer;
