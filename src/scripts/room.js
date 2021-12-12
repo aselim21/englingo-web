@@ -39,6 +39,12 @@ setTimeout(() => {
 //     //1minute
 // }, 108000);
 
+const finish_call_btn = document.getElementById('js-finish-call');
+finish_call_btn.addEventListener("click", async (e) => {
+    deleteMatchInfo_req();
+    closeVideoCall();
+});
+
 let dataChannel;
 let im_user_1 = false;
 let im_user_2 = false;
@@ -97,15 +103,18 @@ async function connectThePeers() {
     if (peerConnection == null) { return -1 };
     if (im_user_1 == true && user1_offer == null && connection_completed == false) {
         //User 1 - creates an offer
+        console.log('creating offer')
         await createOffer_user1(updateMatchInfo_req);
 
     } else if (im_user_2 == true && user1_offer != null && user2_answer == null && connection_completed == false) {
         //User2 - receives the offer and creates an answer
+        console.log('creating answer and connecting')
         await createAnswerAndConnect_user2(user1_offer, updateMatchInfo_req);
         return 0;
 
     } else if (im_user_1 == true && user2_answer != null && connection_completed == false) {
         //User1 - receives the answer and users are connected
+        console.log('connection completed')
         await connectToPeer_user1(user2_answer);
         const data = {
             connection_completed: true
