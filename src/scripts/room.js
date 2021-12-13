@@ -214,7 +214,7 @@ async function saveMission_req(data) {
     });
     return response;
 };
-async function saveMission_req() {
+async function readMission_req() {
     const response = await fetch(`${serverURL_MissionService}/missions/${missioID}`, {
         method: 'GET',
         headers: headers
