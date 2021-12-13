@@ -8,10 +8,10 @@ headers.append("Access-Control-Allow-Credentials", "true");
 headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Credentials, Cookie, Set-Cookie, Authorization');
 headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
 const the_match_id = window.location.pathname.split('/')[3]; //https://englingo.herokuapp.com/rooms/relationships/8df572fb-1d68-415b-a026-27529f794d15
-console.log('the_match_id: ',the_match_id);
+console.log('the_match_id: ', the_match_id);
 const the_userId = window.localStorage.userId;
 const the_topic = window.location.pathname.split('/')[2];
-console.log('the_topic: ',the_topic);
+console.log('the_topic: ', the_topic);
 let missionId;
 
 const configuration = {
@@ -109,37 +109,37 @@ const matchInfo = await readMyMatchInfo_req();
 if (the_userId == matchInfo.user1_id) {
     console.log('User1-creating an offer');
     await createOffer_user1(updateMatchInfo_req);
-    await readMissionToMatchId_req().then((missionInfo) => {
-        showMissionData(missionInfo);
-    });
-    processAnswerWhenReady_user1();
+    await showMissionDataWhenReady();
+
+    await processAnswerWhenReady_user1();
 }
 
 //Im am user 2 and i have my own tasks
 if (the_userId == matchInfo.user2_id) {
     const missionInput = {
-        topic : the_topic,
-        user1_id : matchInfo.user1_id,
-        user2_id : matchInfo.user2_id,
-        match_id : the_match_id
+        topic: the_topic,
+        user1_id: matchInfo.user1_id,
+        user2_id: matchInfo.user2_id,
+        match_id: the_match_id
     }
-    createMission_user2_req(missionInput).then((result) => {
-        readMissionToMatchId_req().then((missionInfo) => {
-            showMissionData(missionInfo)
-        })
-
-    })
+    await createMission_user2_req(missionInput)
+    await showMissionDataWhenReady()
     //User 2 Processing Offer
-    processOfferWhenReady_user2();
+    await processOfferWhenReady_user2();
 }
-function showMissionData(the_missionInfo) {
-    //topic 2nd level
-    const missionTopic_tag = document.getElementById("js-mission-topic");
-    missionTopic_tag.innerHTML = the_missionInfo.topic_level2;
+async function showMissionDataWhenReady() {
+    const missionInfo = await readMissionToMatchId_req();
+    if (!missionInfo) {
+        setTimeout(showMissionDataWhenReady, 200)
+    } else {
+        //topic 2nd level
+        const missionTopic_tag = document.getElementById("js-mission-topic");
+        missionTopic_tag.innerHTML = the_missionInfo.topic_level2;
 
-    const missionWords_tag = document.getElementById('js-mission-words');
-    for (let index = 0; index < missionWords_tag.children.length; index++) {
-        missionWords_tag.children[index].innerHTML = the_missionInfo.words[index];
+        const missionWords_tag = document.getElementById('js-mission-words');
+        for (let index = 0; index < missionWords_tag.children.length; index++) {
+            missionWords_tag.children[index].innerHTML = the_missionInfo.words[index];
+        }
     }
 }
 
