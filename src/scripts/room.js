@@ -1,6 +1,6 @@
 // const serverURL_rooms = 'http://localhost:3000';
 const serverURL_MatchService = 'https://webrtc-englingo.herokuapp.com';
-const serverURL_MissionService = 'https://webrtc-englingo.herokuapp.com';
+const serverURL_MissionService = 'https://englingo-missions.herokuapp.com';
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
@@ -242,23 +242,6 @@ async function deleteMatchInfo_req() {
     return response;
 };
 
-async function saveMission_req(data) {
-    const response = await fetch(`${serverURL_MissionService}/missions`, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(data)
-    });
-    return response;
-};
-
-async function readMission_req() {
-    const response = await fetch(`${serverURL_MissionService}/missions/${missioID}`, {
-        method: 'GET',
-        headers: headers
-    });
-    return response;
-};
-
 async function updateUserTranscripts_req(data) {
     const response = await fetch(`/userTranscripts`, {
         method: 'PUT',
@@ -269,7 +252,7 @@ async function updateUserTranscripts_req(data) {
 }
 
 async function createMission_user2_req(data) {
-    const response = await fetch(`/missions`, {
+    const response = await fetch(`${serverURL_MissionService}/missions`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
@@ -278,7 +261,7 @@ async function createMission_user2_req(data) {
 }
 
 async function readMissionToMatchId_req() {
-    const response = await fetch(`/missions/match/${the_match_id}`, {
+    const response = await fetch(`${serverURL_MissionService}/missions/match/${the_match_id}`, {
         method: 'GET',
         headers: headers
     });
