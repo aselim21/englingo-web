@@ -129,7 +129,7 @@ if (the_userId == matchInfo.user2_id) {
 }
 async function displayMissionDataWhenReady() {
     const missionInfo = await readMissionToMatchId_req();
-    if (!missionInfo) {
+    if (missionInfo == -1) {
         setTimeout(displayMissionDataWhenReady, 200)
     } else {
         //topic 2nd level
