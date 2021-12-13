@@ -36,13 +36,14 @@ app.get('/rooms', (req, res) => {
     //   res.sendFile(path.join(__dirname, '../src', 'room.html'));
 });
 
-app.get('/rooms/:roomId', (req, res) => {
+app.get('/rooms/:topic/:roomId', (req, res) => {
     res.sendFile(path.join(__dirname, '../src', 'room.html'));
 });
 
 app.put('/userTranscripts', (req, res) => {
     const user_id = req.body.userId;
     const data = req.body;
+    //check mission ID if the same, update, if different, zero and change
     let userTranscripts = JSON.parse(fs.readFileSync('server/userTranscripts.json'));
     userTranscripts.userId = user_id;
     data.words.forEach(element => {
