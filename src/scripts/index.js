@@ -8,8 +8,11 @@ headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Conten
 headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
 
 //Create userId
+let userId = window.localStorage.userId;
+if(!userId){
 window.localStorage.setItem('userId', `englingo_user${Math.floor(Math.random() * 10000000)}`);
-const userId = window.localStorage.userId;
+userId = window.localStorage.userId;
+}
 //Topic buttons
 const list_of_topic_btns = document.getElementById('js-topic-buttons');
 
