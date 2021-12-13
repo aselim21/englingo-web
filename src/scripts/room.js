@@ -242,7 +242,7 @@ async function updateUserTranscripts_req(data) {
 
 
 let spokenFromSession = {
-    userId: userId,
+    userId: the_userId,
     words: []
 };
 
