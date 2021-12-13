@@ -135,7 +135,7 @@ function showMissionData(the_missionInfo) {
     const missionTopic_tag = document.getElementById("js-mission-topic");
     missionTopic_tag.innerHTML = the_missionInfo.topic_level2;
 
-    const missionWords_tag = document.getElementsByClassName('js-mission-words');
+    const missionWords_tag = document.getElementById('js-mission-words');
     for (let index = 0; index < missionWords_tag.children.length; index++) {
         missionWords_tag.children[index].innerHTML = the_missionInfo.words[index];
     }
