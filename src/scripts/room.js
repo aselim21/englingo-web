@@ -23,7 +23,70 @@ let peerConnection = new RTCPeerConnection({ configuration: configuration, iceSe
 //Monitor the state of the Peer Connection
 peerConnection.onconnectionstatechange = function (event) {
     console.log('State changed ' + peerConnection.connectionState);
+    //Start Speech recognition wenn connectionState == connected
+
+
+
+    //----------
 }
+
+
+//-------------------Speech Recognition
+const SpeechRecognition = window.speechRecognition || window.webkitSpeechRecognition;
+// const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+	// create a SpeechRecognition object
+const recognition = new SpeechRecognition();
+  // set the language to english
+  recognition.lang = 'en-EN';
+ 
+  // false = speech recognition will stop after a few seconds of silence
+  // true = when the user stops talking, speech recognition will continue until we stop it
+  recognition.continuous = true;
+  // to retrieve results, starts an input when the recognition identifies a word and returns it with the word it identified before
+  // called every time the Speech APi captures a line 
+  let spokenFromSession= [];
+  recognition.onresult = function(event) {
+
+      // event is a SpeechRecognitionEvent object, it holds all the lines we have captured so far
+	// event.resultIndex = read-only, returns the lowest index value result in the array that has actually changed 
+	var current = event.resultIndex;
+    console.log('event.results[current]' + event.results[current][0].transcript)
+	console.log("current: " + current);
+  
+	// event.results = read-only, returns an object representing all the speech recognition results for the current session
+	// [current] = returns an object representing all the speech recognition results for the current session
+	// .transcript = read-only, returns a string containing the transcript of the recognized word
+	var transcript = event.results[current][0].transcript;
+    spokenFromSession.push(transcript);
+	console.log("transcript: " + transcript);
+    console.log(spokenFromSession);
+  }
+
+   // perform an action when the recognition starts
+   recognition.onstart = function() { 
+	// overwrites or returns the text content of the selected elements
+	console.log('Voice recognition activated. Try speaking into the microphone.');
+  }
+
+  recognition.onerror = function(event) {
+	if(event.error == 'no-speech') {
+	  instructions.text('No speech was detected. Try again.');  
+	};
+  } 
+
+  recognition.start();
+
+
+
+
+
+
+
+
+
+
+
+
 
 setTimeout(() => {
     if (peerConnection.connectionState != 'connected') {
@@ -59,7 +122,6 @@ localVideo.addEventListener('loadedmetadata', function () {
 remoteVideo.addEventListener('loadedmetadata', function () {
     console.log(`Remote video videoWidth: ${this.videoWidth}px,  videoHeight: ${this.videoHeight}px`);
 });
-
 
 //1. First start sharing media
 
