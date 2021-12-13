@@ -304,9 +304,10 @@ recognition.onresult = function (event) {
     //After 5 sentences restart the speech recognition, because speech recognition cannot record longer than 5 mins.
     //This is to prevent errors.
     if (numberSentancesSpoken % 5 == 0) {
+        updateUserTranscripts_req(spokenFromSession);
         restartSpeechRecognition()
         //save the words in json object through the web server
-        updateUserTranscripts_req(spokenFromSession);
+        
         spokenFromSession.words = [];
        
     }
