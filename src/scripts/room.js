@@ -1,5 +1,6 @@
 // const serverURL_rooms = 'http://localhost:3000';
-const serverURL_rooms = 'https://webrtc-englingo.herokuapp.com';
+const serverURL_MatchService = 'https://webrtc-englingo.herokuapp.com';
+const serverURL_MissionService = 'https://webrtc-englingo.herokuapp.com';
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
@@ -31,7 +32,7 @@ setTimeout(() => {
         closeVideoCall();
     }
     // 10 seconds
-}, 10000);
+}, 12000);
 
 //Duraion of the Call
 // setTimeout(() => {
@@ -180,15 +181,15 @@ async function createAnswerAndConnect_user2(offer, callback) {
 //Requests
 async function readMyMatchInfo_req() {
     console.log('in readMyMatchInfo_req');
-    const response = await fetch(`${serverURL_rooms}/matches/${the_match_id}`, {
+    const response = await fetch(`${serverURL_MatchService}/matches/${the_match_id}`, {
         method: 'GET',
-        headers: headers,
+        headers: headers
     });
     return response.json();
 }
 async function updateMatchInfo_req(data) {
     console.log('in updateMatchInfo_req')
-    const response = await fetch(`${serverURL_rooms}/matches/${the_match_id}`, {
+    const response = await fetch(`${serverURL_MatchService}/matches/${the_match_id}`, {
         method: 'PUT',
         headers: headers,
         body: JSON.stringify(data)
@@ -197,13 +198,29 @@ async function updateMatchInfo_req(data) {
 };
 
 async function deleteMatchInfo_req() {
-    const response = await fetch(`${serverURL_rooms}/matches/${the_match_id}`, {
+    const response = await fetch(`${serverURL_MatchService}/matches/${the_match_id}`, {
         method: 'DELETE',
-        headers: headers,
+        headers: headers
     });
     return response;
 };
 
+
+async function saveMission_req(data) {
+    const response = await fetch(`${serverURL_MissionService}/missions`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data)
+    });
+    return response;
+};
+async function saveMission_req() {
+    const response = await fetch(`${serverURL_MissionService}/missions/${missioID}`, {
+        method: 'GET',
+        headers: headers
+    });
+    return response;
+};
 
 function closeVideoCall() {
     console.log('++++++video closed');
