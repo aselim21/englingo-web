@@ -42,13 +42,18 @@ app.get('/rooms/:topic/:roomId', (req, res) => {
 
 app.put('/userTranscripts', (req, res) => {
     const user_id = req.body.userId;
-    const data = req.body;
-    //check mission ID if the same, update, if different, zero and change
+    const trancriptedWords = req.body.words;
+    const mission_id = req.body.missionId
     let userTranscripts = JSON.parse(fs.readFileSync('server/userTranscripts.json'));
+
+    //check mission ID if the same, update, if different, zero and change
+    if(mission_id != userTranscripts.missionId) userTranscripts.words = [];
     userTranscripts.userId = user_id;
-    data.words.forEach(element => {
+    userTranscripts.missionId = mission_id;
+    trancriptedWords.forEach(element => {
         userTranscripts.words.push(element)
     });
+
     rewriteFile("server/userTranscripts.json", userTranscripts);
     res.status(200).send();
 });

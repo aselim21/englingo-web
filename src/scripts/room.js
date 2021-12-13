@@ -7,12 +7,10 @@ headers.append('Accept', 'application/json');
 headers.append("Access-Control-Allow-Credentials", "true");
 headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Credentials, Cookie, Set-Cookie, Authorization');
 headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
-const the_match_id = window.location.pathname.split('/')[3]; //https://englingo.herokuapp.com/rooms/relationships/8df572fb-1d68-415b-a026-27529f794d15
-console.log('the_match_id: ', the_match_id);
+const the_match_id = window.location.pathname.split('/')[3]; 
 const the_userId = window.localStorage.userId;
 const the_topic = window.location.pathname.split('/')[2];
-console.log('the_topic: ', the_topic);
-let missionId;
+let the_missionId;
 
 const configuration = {
     offerToReceiveAudio: true,
@@ -122,19 +120,17 @@ if (the_userId == matchInfo.user2_id) {
         user2_id: matchInfo.user2_id,
         match_id: the_match_id
     }
-    await createMission_user2_req(missionInput)
-    await displayMissionDataWhenReady()
+    await createMission_user2_req(missionInput);
+    await displayMissionDataWhenReady();
     //User 2 Processing Offer
     await processOfferWhenReady_user2();
 }
 async function displayMissionDataWhenReady() {
-    console.log('----------in displayMissionDataWhenReady----------')
     const missionInfo = await readMissionToMatchId_req();
     if (missionInfo == -1) {
-        console.log('starting displayMissionDataWhenReady again')
-        setTimeout(displayMissionDataWhenReady, 200)
+        setTimeout(displayMissionDataWhenReady, 500)
     } else {
-        console.log('----------mission Info found----------')
+        the_missionId = missionInfo._id;
         //topic 2nd level
         const missionTopic_tag = document.getElementById("js-mission-topic");
         missionTopic_tag.innerHTML = missionInfo.topic_level2;
@@ -272,13 +268,12 @@ async function readMissionToMatchId_req() {
     });
     return response.json();
 }
+
 //-------------------Speech Recognition
-
-
 let spokenFromSession = {
     userId: the_userId,
     words: [],
-    missionId: "" //TODO
+    missionId: the_missionId
 };
 
 const SpeechRecognition = window.speechRecognition || window.webkitSpeechRecognition;
@@ -308,16 +303,20 @@ recognition.onresult = function (event) {
 
     //After 5 sentences restart the speech recognition, because speech recognition cannot record longer than 5 mins.
     //This is to prevent errors.
-    if (numberSentancesSpoken % 3 == 0) {
-        recognition.stop();
+    if (numberSentancesSpoken % 5 == 0) {
+        restartSpeechRecognition()
+        //save the words in json object through the web server
+        updateUserTranscripts_req(spokenFromSession);
+        spokenFromSession.words = [];
+       
+    }
+}
+function restartSpeechRecognition(){
+    console.log('in restartSpeechRecognition');
+    recognition.stop();
         setTimeout(() => {
-            //save the words in json object through the web server
-            updateUserTranscripts_req(spokenFromSession);
-            spokenFromSession.words = [];
-            console.log('Restarting speech recognition');
             recognition.start();
         }, 100)
-    }
 }
 // perform an action when the recognition starts
 recognition.onstart = function () {
