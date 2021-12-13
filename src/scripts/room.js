@@ -128,10 +128,13 @@ if (the_userId == matchInfo.user2_id) {
     await processOfferWhenReady_user2();
 }
 async function displayMissionDataWhenReady() {
+    console.log('----------in displayMissionDataWhenReady----------')
     const missionInfo = await readMissionToMatchId_req();
     if (missionInfo == -1) {
+        console.log('starting displayMissionDataWhenReady again')
         setTimeout(displayMissionDataWhenReady, 200)
     } else {
+        console.log('----------mission Info found----------')
         //topic 2nd level
         const missionTopic_tag = document.getElementById("js-mission-topic");
         missionTopic_tag.innerHTML = missionInfo.topic_level2;
