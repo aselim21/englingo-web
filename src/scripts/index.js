@@ -17,6 +17,7 @@ const list_of_topic_btns = document.getElementById('js-topic-buttons');
 for (let index = 0; index < list_of_topic_btns.children.length; index++) {
     const element = list_of_topic_btns.children[index];
     element.addEventListener("click", async (e) => {
+        deactivateOtherButtons(e.currentTarget);
         const topic_name = e.srcElement.getAttribute('topic');
         const data = {
             userId: userId,
@@ -27,7 +28,14 @@ for (let index = 0; index < list_of_topic_btns.children.length; index++) {
         });
     }); 
 }
-
+function deactivateOtherButtons(the_except_btn){
+    for (let index = 0; index < list_of_topic_btns.children.length; index++) {
+        const element = list_of_topic_btns.children[index];
+        if(element != the_except_btn){
+            element.disabled = true;
+        }
+    }
+}
 //Keep asking for a match; If there is one, then open the room
 async function findMatch(the_topic) {
     let match_id;
