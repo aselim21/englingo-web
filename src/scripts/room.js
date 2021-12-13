@@ -304,21 +304,13 @@ recognition.onresult = function (event) {
     //After 5 sentences restart the speech recognition, because speech recognition cannot record longer than 5 mins.
     //This is to prevent errors.
     if (numberSentancesSpoken % 5 == 0) {
-        updateUserTranscripts_req(spokenFromSession);
-        restartSpeechRecognition()
         //save the words in json object through the web server
-        
+        updateUserTranscripts_req(spokenFromSession);
         spokenFromSession.words = [];
        
     }
 }
-function restartSpeechRecognition(){
-    console.log('in restartSpeechRecognition');
-    recognition.stop();
-        setTimeout(() => {
-            recognition.start();
-        }, 100)
-}
+
 // perform an action when the recognition starts
 recognition.onstart = function () {
     // overwrites or returns the text content of the selected elements
@@ -328,8 +320,14 @@ recognition.onstart = function () {
 recognition.onerror = function (event) {
     if (event.error == 'no-speech') {
         console.error('No speech was detected. Try again.');
+        recognition.stop();
     };
 }
+
+recognition.onspeechend = function() {
+    recognition.stop();
+}
+
 
 function closeVideoCall() {
     if (peerConnection) {
