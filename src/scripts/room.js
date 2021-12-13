@@ -116,10 +116,10 @@ if (the_userId == matchInfo.user1_id) {
 //Im am user 2 and i have my own tasks
 if (the_userId == matchInfo.user2_id) {
     const missionInput = {
-        topic = the_topic,
-        user1_id = matchInfo.user1_id,
-        user2_id = matchInfo.user2_id,
-        match_id = the_match_id
+        topic : the_topic,
+        user1_id : matchInfo.user1_id,
+        user2_id : matchInfo.user2_id,
+        match_id : the_match_id
     }
     createMission_user2_req(missionInput).then((result) => {
         readMissionToMatchId_req().then((missionInfo) => {
