@@ -265,7 +265,7 @@ async function readMissionToMatchId_req() {
         method: 'GET',
         headers: headers
     });
-    return response;
+    return response.json();
 }
 //-------------------Speech Recognition
 
