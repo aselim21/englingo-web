@@ -1,5 +1,5 @@
 // const serverURL_rooms = 'http://localhost:3000';
-const serverURL_rooms = 'https://webrtc-englingo.herokuapp.com';
+const serverURL_MatchService = 'https://webrtc-englingo.herokuapp.com';
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
@@ -12,28 +12,26 @@ window.localStorage.setItem('userId', `englingo_user${Math.floor(Math.random() *
 
 //Topic buttons
 const topic1_btn = document.getElementById('js-topic1-button');
-
+const userId = window.localStorage.userId;
 //Listen to the Button for Topic 1
 topic1_btn.addEventListener("click", async (e) => {
-    const userId = window.localStorage.userId;
     const data = {
         userId: userId,
-        topic: e.srcElement.getAttribute('topic'),
-        test:"test"
+        topic: e.srcElement.getAttribute('topic')
     }
-    createParticipant_req(data).then(()=>{
-        findMatch(userId);
+    createParticipant_req(data).then(() => {
+        findMatch();
     })
 });
 
 //Keep asking for a match; If there is one, then open the room
-async function findMatch(the_userId) {
+async function findMatch() {
     let match_id;
-    match_id = await readMatchID_req(the_userId);
+    match_id = await readMatchID_req();
     if (match_id == 'no match') {
         console.log('searching...')
         setTimeout(async function () {
-            await findMatch(the_userId);
+            await findMatch(userId);
         }, 5000)
     } else {
         window.location.assign(`/rooms/${match_id}`);
@@ -42,7 +40,7 @@ async function findMatch(the_userId) {
 
 //Requests
 async function createParticipant_req(data) {
-    const response = await fetch(`${serverURL_rooms}/participant`, {
+    const response = await fetch(`${serverURL_MatchService}/participant`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
@@ -50,13 +48,15 @@ async function createParticipant_req(data) {
     return response;
 }
 
-async function readMatchID_req(the_userId) {
-    const response = await fetch(`${serverURL_rooms}/matches/participants/${the_userId}`, {
+async function readMatchID_req() {
+    const response = await fetch(`${serverURL_MatchService}/matches/participants/${userId}`, {
         method: 'GET',
         headers: headers
     });
     return response.json();
 }
+
+
 
 
 
