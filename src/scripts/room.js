@@ -109,7 +109,7 @@ const matchInfo = await readMyMatchInfo_req();
 if (the_userId == matchInfo.user1_id) {
     console.log('User1-creating an offer');
     await createOffer_user1(updateMatchInfo_req);
-    await showMissionDataWhenReady();
+    await displayMissionDataWhenReady();
 
     await processAnswerWhenReady_user1();
 }
@@ -123,22 +123,22 @@ if (the_userId == matchInfo.user2_id) {
         match_id: the_match_id
     }
     await createMission_user2_req(missionInput)
-    await showMissionDataWhenReady()
+    await displayMissionDataWhenReady()
     //User 2 Processing Offer
     await processOfferWhenReady_user2();
 }
-async function showMissionDataWhenReady() {
+async function displayMissionDataWhenReady() {
     const missionInfo = await readMissionToMatchId_req();
     if (!missionInfo) {
-        setTimeout(showMissionDataWhenReady, 200)
+        setTimeout(displayMissionDataWhenReady, 200)
     } else {
         //topic 2nd level
         const missionTopic_tag = document.getElementById("js-mission-topic");
-        missionTopic_tag.innerHTML = the_missionInfo.topic_level2;
+        missionTopic_tag.innerHTML = missionInfo.topic_level2;
 
         const missionWords_tag = document.getElementById('js-mission-words');
         for (let index = 0; index < missionWords_tag.children.length; index++) {
-            missionWords_tag.children[index].innerHTML = the_missionInfo.words[index];
+            missionWords_tag.children[index].innerHTML = missionInfo.words[index];
         }
     }
 }
