@@ -60,7 +60,8 @@ setTimeout(() => {
     //     missionWords: the_mission_words
     // }
     getEvaluationInstance_req().then((the_eval_id)=>{
-        window.location.assign(`/evaluation/${the_eval_id}`);
+        console.log(the_eval_id)
+        //window.location.assign(`/evaluation/${the_eval_id}`);
     })
     
     //1minute
