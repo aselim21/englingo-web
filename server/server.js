@@ -70,6 +70,11 @@ app.post('/my-evaluation', (req, res) => {
 
 });
 
+app.get('/rooms/evaluation/:id', (req,res)=>{
+    res.sendFile(path.join(__dirname, '../src', 'evaluation.html'));
+
+});
+
 
 function rewriteFile(file, object, callback) {
     fs.writeFile(file, JSON.stringify(object), function (err) {

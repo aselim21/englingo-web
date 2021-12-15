@@ -50,19 +50,18 @@ setTimeout(() => {
 }, 12000);
 
 //Duraion of the Call
-// setTimeout(() => {
-//     closeVideoCall();
-//     //POST für evaluation
-//     const evaluationInput = {
-//         topicLev2: the_topic_level2,
-//         missionWords: the_mission_words
-//     }
-//     createEvaluationInstance_req(evaluationInput);
-
-//     //Go to Evaluation
-//     window.location.assign(`/rooms/${the_topic_level1}/${match_id}`);
-//     //1minute
-// }, 60000);
+setTimeout(() => {
+    closeVideoCall();
+    //POST für evaluation
+    const evaluationInput = {
+        topicLev2: the_topic_level2,
+        missionWords: the_mission_words
+    }
+    const the_eval_id = createEvaluationInstance_req(evaluationInput);
+    //Go to Evaluation
+    window.location.assign(`/rooms/evaluation/${the_eval_id}`);
+    //1minute
+}, 60000);
 
 
 

@@ -1,8 +1,23 @@
 const the_userId = window.localStorage.userId;
 const serverURL_EvaluationService = 'https://englingo-evaluation.herokuapp.com';
+const the_evaluation_id = window.location.pathname.split('/')[4]; 
 
-async function readEvaluation_req() {
-    const response = await fetch(`${serverURL_EvaluationService}//${the_match_id}`, {
+const evaluationInfo = await readMyEvaluation_req(the_evaluation_id);
+
+document.getElementById('js-score').innerHTML = evaluationInfo.score;
+
+evaluationInfo.words_evaluated.forEach(element => {
+    let li_element = document.createElement('li');
+    li_element.innerHTML = element.value;
+    if(element.score > 0){
+        document.getElementById('js-successful-list').appendChild(li_element);
+    }else document.getElementById('js-failed-list').appendChild(li_element);
+});
+
+
+//Requests
+async function readMyEvaluation_req(the_id) {
+    const response = await fetch(`${serverURL_EvaluationService}/evaluations/${the_id}`, {
         method: 'GET',
         headers: headers
     });
