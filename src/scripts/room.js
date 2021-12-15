@@ -1,6 +1,7 @@
 // const serverURL_rooms = 'http://localhost:3000';
 const serverURL_MatchService = 'https://webrtc-englingo.herokuapp.com';
 const serverURL_MissionService = 'https://englingo-missions.herokuapp.com';
+const serverURL_EvaluationService = 'https://englingo-evaluation.herokuapp.com';
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
@@ -9,8 +10,10 @@ headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Conten
 headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
 const the_match_id = window.location.pathname.split('/')[3]; 
 const the_userId = window.localStorage.userId;
-const the_topic = window.location.pathname.split('/')[2];
+const the_topic_level1 = window.location.pathname.split('/')[2];
 let the_missionId;
+let the_topic_level2;
+let the_mission_words; //array
 
 const configuration = {
     offerToReceiveAudio: true,
@@ -49,8 +52,19 @@ setTimeout(() => {
 //Duraion of the Call
 // setTimeout(() => {
 //     closeVideoCall();
+//     //POST für evaluation
+//     const evaluationInput = {
+//         topicLev2: the_topic_level2,
+//         missionWords: the_mission_words
+//     }
+//     createEvaluationInstance_req(evaluationInput);
+
+//     //Go to Evaluation
+//     window.location.assign(`/rooms/${the_topic_level1}/${match_id}`);
 //     //1minute
-// }, 108000);
+// }, 60000);
+
+
 
 const finish_call_btn = document.getElementById('js-finish-call');
 finish_call_btn.addEventListener("click", async (e) => {
@@ -103,7 +117,7 @@ await startMediaSharing();
 //-------------------Speech Recognition
 let spokenFromSession = {
     userId: the_userId,
-    words: [],
+    transcriptSentences: [],
     missionId: the_missionId
 };
 
@@ -129,15 +143,15 @@ recognition.onresult = function (event) {
     // [current] = returns an object representing all the speech recognition results for the current session
     // .transcript = read-only, returns a string containing the transcript of the recognized word
     var transcript = event.results[current][0].transcript;
-    spokenFromSession.words.push(transcript);
-    console.log(spokenFromSession.words);
+    spokenFromSession.transcriptSentences.push(transcript);
+    console.log(spokenFromSession.transcriptSentences);
 
     //After 5 sentences restart the speech recognition, because speech recognition cannot record longer than 5 mins.
     //This is to prevent errors.
     if (numberSentancesSpoken % 5 == 0) {
         //save the words in json object through the web server
         updateUserTranscripts_req(spokenFromSession);
-        spokenFromSession.words = [];
+        spokenFromSession.transcriptSentences = [];
        
     }
 }
@@ -175,7 +189,7 @@ if (the_userId == matchInfo.user1_id) {
 //Im am user 2 and i have my own tasks
 if (the_userId == matchInfo.user2_id) {
     const missionInput = {
-        topic: the_topic,
+        topic: the_topic_level1,
         user1_id: matchInfo.user1_id,
         user2_id: matchInfo.user2_id,
         match_id: the_match_id
@@ -191,9 +205,11 @@ async function displayMissionDataWhenReady() {
         setTimeout(displayMissionDataWhenReady, 500)
     } else {
         the_missionId = missionInfo._id;
+        the_topic_level2 = missionInfo.topic_level2;
+        the_mission_words = missionInfo.words
         //topic 2nd level
         const missionTopic_tag = document.getElementById("js-mission-topic");
-        missionTopic_tag.innerHTML = missionInfo.topic_level2;
+        missionTopic_tag.innerHTML = the_topic_level2;
 
         const missionWords_tag = document.getElementById('js-mission-words');
         for (let index = 0; index < missionWords_tag.children.length; index++) {
@@ -329,6 +345,14 @@ async function readMissionToMatchId_req() {
     return response.json();
 }
 
+async function createEvaluationInstance_req(data) {
+    const response = await fetch(`/my-evaluation`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data)
+    });
+    return response.json();
+}
 
 
 function closeVideoCall() {

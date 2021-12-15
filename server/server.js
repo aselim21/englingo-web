@@ -6,6 +6,7 @@ app.use(express.json());
 app.use(express.static("src"));
 const PORT = process.env.PORT || 3000;
 let fs = require('fs');
+const serverURL_EvaluationService = 'https://englingo-evaluation.herokuapp.com';
 
 app.use((req, res, next) => {
     const corsWhitelist = [
@@ -50,11 +51,25 @@ app.put('/userTranscripts', (req, res) => {
     if(mission_id != userTranscripts.missionId) userTranscripts.words = [];
     userTranscripts.userId = user_id;
     userTranscripts.missionId = mission_id;
-    userTranscripts.words = userTranscripts.words.concat(trancriptedWords);
+    userTranscripts.transcriptSentences = userTranscripts.transcriptSentences.concat(trancriptedWords);
 
     rewriteFile("server/userTranscripts.json", userTranscripts);
     res.status(200).send();
 });
+
+app.post('/my-evaluation', (req, res) => {
+    let data = JSON.parse(fs.readFileSync('server/userTranscripts.json'));
+    data.topicLev2 = req.body.topicLev2;
+    data.missionWords = req.body.missionWords;
+    console.log(data);
+   
+    createMyEvaluation_req(data).then((result)=>{ 
+
+        res.status(200).send(result);
+    })
+
+});
+
 
 function rewriteFile(file, object, callback) {
     fs.writeFile(file, JSON.stringify(object), function (err) {
@@ -69,3 +84,12 @@ function rewriteFile(file, object, callback) {
 app.listen(PORT, () => {
     console.log(`Express server listening on port ${PORT}...`);
 });
+
+async function createMyEvaluation_req(data) {
+    const response = await fetch(`${serverURL_EvaluationService}/evaluations`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data)
+    });
+    return response.json();
+}

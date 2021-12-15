@@ -49,6 +49,7 @@ async function findMatch(the_topic) {
             await findMatch(the_topic);
         }, 5000)
     } else {
+        //TODO: Create a Mission here - Audit 4
         window.location.assign(`/rooms/${the_topic}/${match_id}`);
     }
 }
