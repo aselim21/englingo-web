@@ -50,9 +50,7 @@ app.put('/userTranscripts', (req, res) => {
     if(mission_id != userTranscripts.missionId) userTranscripts.words = [];
     userTranscripts.userId = user_id;
     userTranscripts.missionId = mission_id;
-    trancriptedWords.forEach(element => {
-        userTranscripts.words.push(element)
-    });
+    userTranscripts.words = userTranscripts.words.concat(trancriptedWords);
 
     rewriteFile("server/userTranscripts.json", userTranscripts);
     res.status(200).send();
