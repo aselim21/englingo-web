@@ -59,9 +59,10 @@ setTimeout(() => {
         topicLev2: the_topic_level2,
         missionWords: the_mission_words
     }
-    const the_eval_id = await createEvaluationInstance_req(evaluationInput);
-    //Go to Evaluation
-    window.location.assign(`/evaluation/${the_eval_id}`);
+    createEvaluationInstance_req(evaluationInput).then((the_eval_id)=>{
+        window.location.assign(`/evaluation/${the_eval_id}`);
+    })
+    
     //1minute
 }, 60000);
 
