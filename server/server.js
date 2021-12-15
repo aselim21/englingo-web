@@ -91,7 +91,7 @@ app.get('/myEvaluation', (req, res) => {
       }, (error) => {
           res.send(error)
         // console.log(error);
-      }).catch
+      })
 });
 
 app.get('/evaluation/:id', (req,res)=>{
