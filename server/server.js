@@ -45,28 +45,32 @@ app.get('/rooms/:topic/:roomId', (req, res) => {
 app.put('/userTranscripts', (req, res) => {
     const user_id = req.body.userId;
     const trancriptedWords = req.body.words;
-    const mission_id = req.body.missionId
+    const mission_id = req.body.missionId;
+    const topicLev2 = req.body.topicLev2;
+    const missionWords = req.body.missionWords;
+
     let userTranscripts = JSON.parse(fs.readFileSync('server/userTranscripts.json'));
 
     //check mission ID if the same, update, if different, zero and change
-    if(mission_id != userTranscripts.missionId) userTranscripts.words = [];
-    userTranscripts.userId = user_id;
-    userTranscripts.missionId = mission_id;
+    if(mission_id != userTranscripts.missionId) {
+        userTranscripts.userId = user_id;
+        userTranscripts.missionId = mission_id;
+        userTranscripts.words = [];
+        userTranscripts.topicLev2 = topicLev2;
+        userTranscripts.missionWords = missionWords;
+    }
     userTranscripts.transcriptSentences = userTranscripts.transcriptSentences.concat(trancriptedWords);
-
     rewriteFile("server/userTranscripts.json", userTranscripts);
     res.status(200).send();
 });
 
-app.post('/myEvaluation', (req, res) => {
-    let data = JSON.parse(fs.readFileSync('server/userTranscripts.json'));
-    data.topicLev2 = req.body.topicLev2;
-    data.missionWords = req.body.missionWords;
-    console.log(JSON.stringify(data));
-   
+app.get('/myEvaluation', (req, res) => {
+    const data = JSON.parse(fs.readFileSync('server/userTranscripts.json'));
+    // console.log(JSON.stringify(data));
     requestify.post(`${serverURL_EvaluationService}/evaluations`, data).then((result)=>{
         res.status(200).send(result.body);        
     }).catch(err => {
+        console.log(err);
         res.status(400).json("Error: " + JSON.stringify(err));
     });
 

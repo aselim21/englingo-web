@@ -52,14 +52,14 @@ setTimeout(() => {
 //Duraion of the Call
 setTimeout(() => {
     recognition.stop();
-    updateUserTranscripts_req(spokenFromSession);
+    //updateUserTranscripts_req(spokenFromSession);
     closeVideoCall();
     //POST für evaluation
-    const evaluationInput = {
-        topicLev2: the_topic_level2,
-        missionWords: the_mission_words
-    }
-    createEvaluationInstance_req(evaluationInput).then((the_eval_id)=>{
+    // const evaluationInput = {
+    //     topicLev2: the_topic_level2,
+    //     missionWords: the_mission_words
+    // }
+    createEvaluationInstance_req().then((the_eval_id)=>{
         window.location.assign(`/evaluation/${the_eval_id}`);
     })
     
@@ -120,7 +120,9 @@ await startMediaSharing();
 let spokenFromSession = {
     userId: the_userId,
     transcriptSentences: [],
-    missionId: the_missionId
+    missionId: the_missionId,
+    topicLev2: the_topic_level2,
+    missionWords: the_mission_words
 };
 
 const SpeechRecognition = window.speechRecognition || window.webkitSpeechRecognition;
@@ -347,11 +349,10 @@ async function readMissionToMatchId_req() {
     return response.json();
 }
 
-async function createEvaluationInstance_req(data) {
+async function getEvaluationInstance_req() {
     const response = await fetch(`/myEvaluation`, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(data)
+        method: 'GET',
+        headers: headers
     });
     return response.json();
 }
