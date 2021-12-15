@@ -16,7 +16,8 @@ app.use((req, res, next) => {
         'https://webrtc-englingo.herokuapp.com',
         'http://127.0.0.1:3000',
         'http://localhost:3000',
-        'https://englingo.herokuapp.com'
+        'https://englingo.herokuapp.com',
+        'https://englingo-evaluation.herokuapp.com'
     ];
     if (corsWhitelist.indexOf(req.headers.origin) !== -1) {
         res.header('Access-Control-Allow-Origin', req.headers.origin);
