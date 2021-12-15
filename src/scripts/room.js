@@ -59,7 +59,7 @@ setTimeout(() => {
     //     topicLev2: the_topic_level2,
     //     missionWords: the_mission_words
     // }
-    createEvaluationInstance_req().then((the_eval_id)=>{
+    getEvaluationInstance_req().then((the_eval_id)=>{
         window.location.assign(`/evaluation/${the_eval_id}`);
     })
     
