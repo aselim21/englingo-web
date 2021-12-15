@@ -100,15 +100,64 @@ async function startMediaSharing() {
 await startMediaSharing();
 
 
+//-------------------Speech Recognition
+let spokenFromSession = {
+    userId: the_userId,
+    words: [],
+    missionId: the_missionId
+};
 
+const SpeechRecognition = window.speechRecognition || window.webkitSpeechRecognition;
+// const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+// create a SpeechRecognition object
+const recognition = new SpeechRecognition();
+// set the language to english
+recognition.lang = 'en-EN';
+// false = speech recognition will stop after a few seconds of silence
+// true = when the user stops talking, speech recognition will continue until we stop it
+recognition.continuous = true;
+// to retrieve results, starts an input when the recognition identifies a word and returns it with the word it identified before
+// called every time the Speech APi captures a line 
 
+let numberSentancesSpoken = 0;
+recognition.onresult = function (event) {
+    // event is a SpeechRecognitionEvent object, it holds all the lines we have captured so far
+    // event.resultIndex = read-only, returns the lowest index value result in the array that has actually changed 
+    numberSentancesSpoken++;
+    var current = event.resultIndex;
+    // event.results = read-only, returns an object representing all the speech recognition results for the current session
+    // [current] = returns an object representing all the speech recognition results for the current session
+    // .transcript = read-only, returns a string containing the transcript of the recognized word
+    var transcript = event.results[current][0].transcript;
+    spokenFromSession.words.push(transcript);
+    console.log(spokenFromSession.words);
 
+    //After 5 sentences restart the speech recognition, because speech recognition cannot record longer than 5 mins.
+    //This is to prevent errors.
+    if (numberSentancesSpoken % 5 == 0) {
+        //save the words in json object through the web server
+        updateUserTranscripts_req(spokenFromSession);
+        spokenFromSession.words = [];
+       
+    }
+}
 
+// perform an action when the recognition starts
+recognition.onstart = function () {
+    // overwrites or returns the text content of the selected elements
+    console.log('Voice recognition activated. Try speaking into the microphone.');
+}
 
+recognition.onerror = function (event) {
+    if (event.error == 'no-speech') {
+        console.error('No speech was detected. Try again.');
+        recognition.stop();
+    };
+}
 
-
-
-
+recognition.onspeechend = function() {
+    recognition.stop();
+}
 
 //------------------------------------WebRTC Peer Connection Handshake Process--------------------------------------------------
 
@@ -280,64 +329,6 @@ async function readMissionToMatchId_req() {
     return response.json();
 }
 
-//-------------------Speech Recognition
-let spokenFromSession = {
-    userId: the_userId,
-    words: [],
-    missionId: the_missionId
-};
-
-const SpeechRecognition = window.speechRecognition || window.webkitSpeechRecognition;
-// const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-// create a SpeechRecognition object
-const recognition = new SpeechRecognition();
-// set the language to english
-recognition.lang = 'en-EN';
-// false = speech recognition will stop after a few seconds of silence
-// true = when the user stops talking, speech recognition will continue until we stop it
-recognition.continuous = true;
-// to retrieve results, starts an input when the recognition identifies a word and returns it with the word it identified before
-// called every time the Speech APi captures a line 
-
-let numberSentancesSpoken = 0;
-recognition.onresult = function (event) {
-    // event is a SpeechRecognitionEvent object, it holds all the lines we have captured so far
-    // event.resultIndex = read-only, returns the lowest index value result in the array that has actually changed 
-    numberSentancesSpoken++;
-    var current = event.resultIndex;
-    // event.results = read-only, returns an object representing all the speech recognition results for the current session
-    // [current] = returns an object representing all the speech recognition results for the current session
-    // .transcript = read-only, returns a string containing the transcript of the recognized word
-    var transcript = event.results[current][0].transcript;
-    spokenFromSession.words.push(transcript);
-    console.log(spokenFromSession.words);
-
-    //After 5 sentences restart the speech recognition, because speech recognition cannot record longer than 5 mins.
-    //This is to prevent errors.
-    if (numberSentancesSpoken % 5 == 0) {
-        //save the words in json object through the web server
-        updateUserTranscripts_req(spokenFromSession);
-        spokenFromSession.words = [];
-       
-    }
-}
-
-// perform an action when the recognition starts
-recognition.onstart = function () {
-    // overwrites or returns the text content of the selected elements
-    console.log('Voice recognition activated. Try speaking into the microphone.');
-}
-
-recognition.onerror = function (event) {
-    if (event.error == 'no-speech') {
-        console.error('No speech was detected. Try again.');
-        recognition.stop();
-    };
-}
-
-recognition.onspeechend = function() {
-    recognition.stop();
-}
 
 
 function closeVideoCall() {
