@@ -1,6 +1,7 @@
 //npm run devStart
 const express = require('express');
 var requestify = require('requestify'); 
+const axios = require('axios')
 const app = express();
 const path = require('path');
 app.use(express.json());
@@ -67,13 +68,21 @@ app.put('/userTranscripts', (req, res) => {
 app.get('/myEvaluation', (req, res) => {
     const data = JSON.parse(fs.readFileSync('server/userTranscripts.json'));
     // console.log(JSON.stringify(data));
-    requestify.post(`${serverURL_EvaluationService}/evaluations`, data).then((result)=>{
-        res.status(200).send(result.body);        
-    }).catch(err => {
-        console.log(err);
-        res.status(400).json("Error: " + JSON.stringify(err));
-    });
+    // requestify.post(`${serverURL_EvaluationService}/evaluations`, data).then((result)=>{
+    //     res.status(200).send(result.body);        
+    // }).catch(err => {
+    //     console.log(err);
+    //     res.status(400).json("Error: " + JSON.stringify(err));
+    // });
 
+    axios.post(`${serverURL_EvaluationService}/evaluations`, data)
+      .then((response) => {
+          return response
+        // console.log(response);
+      }, (error) => {
+          return error
+        // console.log(error);
+      });
 });
 
 app.get('/evaluation/:id', (req,res)=>{
