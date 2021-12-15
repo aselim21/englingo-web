@@ -6,7 +6,7 @@ headers.append('Accept', 'application/json');
 headers.append("Access-Control-Allow-Credentials", "true");
 headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Credentials, Cookie, Set-Cookie, Authorization');
 headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
-const the_evaluation_id = window.location.pathname.split('/')[3]; 
+const the_evaluation_id = window.location.pathname.split('/')[2]; 
 
 const evaluationInfo = await readMyEvaluation_req(the_evaluation_id);
 
