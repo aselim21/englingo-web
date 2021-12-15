@@ -1,5 +1,6 @@
 //npm run devStart
 const express = require('express');
+var requestify = require('requestify'); 
 const app = express();
 const path = require('path');
 app.use(express.json());
@@ -57,16 +58,17 @@ app.put('/userTranscripts', (req, res) => {
     res.status(200).send();
 });
 
-app.post('/my-evaluation', (req, res) => {
+app.post('/myEvaluation', (req, res) => {
     let data = JSON.parse(fs.readFileSync('server/userTranscripts.json'));
     data.topicLev2 = req.body.topicLev2;
     data.missionWords = req.body.missionWords;
-    console.log(data);
+    console.log(JSON.stringify(data));
    
-    createMyEvaluation_req(data).then((result)=>{ 
-
-        res.status(200).send(result);
-    })
+    requestify.post(`${serverURL_EvaluationService}/evaluations`, data).then((result)=>{
+        res.status(200).send(result.body);        
+    }).catch(err => {
+        res.status(400).json("Error: " + JSON.stringify(err));
+    });
 
 });
 
@@ -90,11 +92,10 @@ app.listen(PORT, () => {
     console.log(`Express server listening on port ${PORT}...`);
 });
 
-async function createMyEvaluation_req(data) {
-    const response = await fetch(`${serverURL_EvaluationService}/evaluations`, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(data)
-    });
+function createMyEvaluation_req(data) {
+    requestify.post(`${serverURL_EvaluationService}/evaluations`, data).then(()=>{
+
+    })
+ 
     return response.json();
 }
