@@ -8,8 +8,8 @@ app.use(express.json());
 app.use(express.static("src"));
 const PORT = process.env.PORT || 3000;
 let fs = require('fs');
-//  const serverURL_EvaluationService = 'https://englingo-evaluation.herokuapp.com';
-const serverURL_EvaluationService = 'http://localhost:3001';
+const serverURL_EvaluationService = 'https://englingo-evaluation.herokuapp.com';
+// const serverURL_EvaluationService = 'http://localhost:3001';
 
 app.use((req, res, next) => {
     const corsWhitelist = [
