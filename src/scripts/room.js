@@ -348,7 +348,7 @@ async function readMissionToMatchId_req() {
 }
 
 async function createEvaluationInstance_req(data) {
-    const response = await fetch(`/my-evaluation`, {
+    const response = await fetch(`/myEvaluation`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
