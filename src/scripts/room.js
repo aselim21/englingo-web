@@ -51,6 +51,8 @@ setTimeout(() => {
 
 //Duraion of the Call
 setTimeout(() => {
+    recognition.stop();
+    updateUserTranscripts_req(spokenFromSession);
     closeVideoCall();
     //POST für evaluation
     const evaluationInput = {
@@ -59,7 +61,7 @@ setTimeout(() => {
     }
     const the_eval_id = createEvaluationInstance_req(evaluationInput);
     //Go to Evaluation
-    window.location.assign(`/rooms/evaluation/${the_eval_id}`);
+    window.location.assign(`/evaluation/${the_eval_id}`);
     //1minute
 }, 60000);
 
