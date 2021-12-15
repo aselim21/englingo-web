@@ -85,7 +85,6 @@ app.get('/myEvaluation', (req, res) => {
     // console.log(`${serverURL_EvaluationService}/evaluations`)
     axios.post(`${serverURL_EvaluationService}/evaluations`, data)
       .then((response) => {
-
           res.send(response.data)
         // console.log(response);
       }, (error) => {
