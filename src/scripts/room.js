@@ -46,8 +46,8 @@ setTimeout(() => {
         closeVideoCall();
         window.location.replace(`/home`);
     }
-    // 10 seconds
-}, 12000);
+    // 20 seconds
+}, 20000);
 
 //Duraion of the Call
 setTimeout(() => {
