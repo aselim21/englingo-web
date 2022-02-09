@@ -1,5 +1,5 @@
 // const serverURL_rooms = 'http://localhost:3000';
-const serverURL_rooms = 'https://webrtc-englingo.herokuapp.com';
+const serverURL_MatchService = 'https://webrtc-englingo.herokuapp.com';
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
@@ -8,41 +8,55 @@ headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Conten
 headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
 
 //Create userId
+let userId = window.localStorage.userId;
+if(!userId){
 window.localStorage.setItem('userId', `englingo_user${Math.floor(Math.random() * 10000000)}`);
-
+userId = window.localStorage.userId;
+}
 //Topic buttons
-const topic1_btn = document.getElementById('js-topic1-button');
+const list_of_topic_btns = document.getElementById('js-topic-buttons');
 
-//Listen to the Button for Topic 1
-topic1_btn.addEventListener("click", async (e) => {
-    const userId = window.localStorage.userId;
-    const data = {
-        userId: userId,
-        topic: e.srcElement.getAttribute('topic'),
-        test:"test"
+//attach event listener to all Topic Buttons
+for (let index = 0; index < list_of_topic_btns.children.length; index++) {
+    const element = list_of_topic_btns.children[index];
+    element.addEventListener("click", async (e) => {
+        deactivateOtherButtons(e.currentTarget);
+        const topic_name = e.srcElement.getAttribute('topic');
+        const data = {
+            userId: userId,
+            topic: topic_name
+        }
+        createParticipant_req(data).then(() => {
+            findMatch(topic_name);
+        });
+    }); 
+}
+function deactivateOtherButtons(the_except_btn){
+    for (let index = 0; index < list_of_topic_btns.children.length; index++) {
+        const element = list_of_topic_btns.children[index];
+        if(element != the_except_btn){
+            element.disabled = true;
+        }
     }
-    createParticipant_req(data).then(()=>{
-        findMatch(userId);
-    })
-});
-
+}
 //Keep asking for a match; If there is one, then open the room
-async function findMatch(the_userId) {
+async function findMatch(the_topic) {
     let match_id;
-    match_id = await readMatchID_req(the_userId);
+    match_id = await readMatchID_req();
     if (match_id == 'no match') {
-        console.log('searching...')
+        console.log('searching...');
         setTimeout(async function () {
-            await findMatch(the_userId);
+            await findMatch(the_topic);
         }, 5000)
     } else {
-        window.location.assign(`/rooms/${match_id}`);
+        //TODO: Create a Mission here - Audit 4
+        window.location.assign(`/rooms/${the_topic}/${match_id}`);
     }
 }
 
 //Requests
 async function createParticipant_req(data) {
-    const response = await fetch(`${serverURL_rooms}/participant`, {
+    const response = await fetch(`${serverURL_MatchService}/participant`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
@@ -50,13 +64,11 @@ async function createParticipant_req(data) {
     return response;
 }
 
-async function readMatchID_req(the_userId) {
-    const response = await fetch(`${serverURL_rooms}/matches/participants/${the_userId}`, {
+async function readMatchID_req() {
+    const response = await fetch(`${serverURL_MatchService}/matches/participants/${userId}`, {
         method: 'GET',
         headers: headers
     });
     return response.json();
 }
-
-
 
