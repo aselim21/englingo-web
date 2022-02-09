@@ -49,7 +49,7 @@ setTimeout(() => {
     // 20 seconds
 }, 20000);
 
-//Duraion of the Call
+//Duration of the Call
 setTimeout(() => {
     recognition.stop();
     //updateUserTranscripts_req(spokenFromSession);
@@ -64,10 +64,8 @@ setTimeout(() => {
         //window.location.assign(`/evaluation/${the_eval_id}`);
     })
     
-    //1minute
+    //max 1 minute call
 }, 60000);
-
-
 
 const finish_call_btn = document.getElementById('js-finish-call');
 finish_call_btn.addEventListener("click", async (e) => {
@@ -232,17 +230,18 @@ async function createOffer_user1(callback) {
     peerConnection.onicecandidate = function (e) {
         console.log("ICE candidate (peerConnection)", e);
     };
+    const offer = await peerConnection.createOffer(offerOptions);
+    await peerConnection.setLocalDescription(offer);
     setTimeout(() => {
         console.log('PUT OFFER');
         callback({ user1_offer: peerConnection.localDescription });
     }, 2000)
-    const offer = await peerConnection.createOffer(offerOptions);
-    await peerConnection.setLocalDescription(offer);
     return offer;
 }
 //~~~~~~~~~~~2. User 2 processes the offer when the offer is ready ~~~~~~~~~~~
 async function processOfferWhenReady_user2() {
     console.log('in processOfferWhenReady_user2');
+    // constantly to check if offer is ready
     setTimeout(async function () {
         const matchInfo = await readMyMatchInfo_req();
         const user1_offer = matchInfo.user1_offer;
@@ -254,10 +253,11 @@ async function processOfferWhenReady_user2() {
             console.log('staring processOfferWhenReady_user2 again')
             await processOfferWhenReady_user2()
         }
-    }, 1000)
+    // 1000 -> 500    
+    }, 500)
     return -1;
 }
-//~~~~~~~~~~~3. User 2 processes the offer - creates an aswer ~~~~~~~~~~~
+//~~~~~~~~~~~3. User 2 processes the offer - creates an answer ~~~~~~~~~~~
 async function createAnswerAndConnect_user2(offer, callback) {
     peerConnection.addEventListener('datachannel', event => {
         dataChannel = event.channel;
@@ -280,6 +280,7 @@ async function createAnswerAndConnect_user2(offer, callback) {
 //~~~~~~~~~~~4. User 1 processes the answer when the answer is ready ~~~~~~~~~~~
 async function processAnswerWhenReady_user1() {
     console.log('in processAnswerWhenReady_user1');
+    // constantly to check if answer is ready
     setTimeout(async function () {
         const matchInfo = await readMyMatchInfo_req();
         const user2_answer = matchInfo.user2_answer;
@@ -289,11 +290,11 @@ async function processAnswerWhenReady_user1() {
             await deleteMatchInfo_req();
             return 0;
         } else {
-
             console.log('staring processAnswerWhenReady_user1 again')
             await processAnswerWhenReady_user1()
         }
-    }, 1000)
+    // 1000 -> 500    
+    }, 500)
     return -1;
 }
 

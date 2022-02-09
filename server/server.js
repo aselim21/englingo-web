@@ -29,7 +29,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
 //~~~~~~~~~~~~~~~~~~~~~~~~~~RESTful Service - Methods~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 app.get('/home', (req, res) => {
