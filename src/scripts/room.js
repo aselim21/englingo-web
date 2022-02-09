@@ -235,7 +235,8 @@ async function createOffer_user1(callback) {
     setTimeout(() => {
         console.log('PUT OFFER');
         callback({ user1_offer: peerConnection.localDescription });
-    }, 2000)
+    // 2000 -> 1500    
+    }, 1500)
     return offer;
 }
 //~~~~~~~~~~~2. User 2 processes the offer when the offer is ready ~~~~~~~~~~~
@@ -269,7 +270,8 @@ async function createAnswerAndConnect_user2(offer, callback) {
         setTimeout(() => {
             console.log("PUT ANSWER");
             callback({ user2_answer: peerConnection.localDescription });
-        }, 2000)
+        // 2000 -> 1500      
+        }, 1500)
     };
     const remoteDesc = new RTCSessionDescription(offer);
     await peerConnection.setRemoteDescription(remoteDesc);
