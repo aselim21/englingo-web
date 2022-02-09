@@ -253,8 +253,8 @@ async function processOfferWhenReady_user2() {
             console.log('staring processOfferWhenReady_user2 again')
             await processOfferWhenReady_user2()
         }
-    // 1000 -> 500    
-    }, 500)
+    // 500 -> 100    
+    }, 100)
     return -1;
 }
 //~~~~~~~~~~~3. User 2 processes the offer - creates an answer ~~~~~~~~~~~
@@ -293,8 +293,8 @@ async function processAnswerWhenReady_user1() {
             console.log('staring processAnswerWhenReady_user1 again')
             await processAnswerWhenReady_user1()
         }
-    // 1000 -> 500    
-    }, 500)
+    // 500 -> 100    
+    }, 100)
     return -1;
 }
 
