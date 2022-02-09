@@ -47,7 +47,8 @@ async function findMatch(the_topic) {
         console.log('searching...');
         setTimeout(async function () {
             await findMatch(the_topic);
-        }, 5000)
+        // 5000 -> 100    
+        }, 100)
     } else {
         //TODO: Create a Mission here - Audit 4
         window.location.assign(`/rooms/${the_topic}/${match_id}`);
