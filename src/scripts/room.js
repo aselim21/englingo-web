@@ -46,7 +46,7 @@ peerConnection.onconnectionstatechange = async function (event) {
         const the_transcript = await createUserTranscripts_req(spokenFromSession);
         the_transcriptId = the_transcript._id
         //Duration of the Call
-        setTimeout(() => {
+        setTimeout(async function() {
             recognition.stop();
             updateUserTranscripts_req(spokenFromSession);
             closeVideoCall();
@@ -56,7 +56,7 @@ peerConnection.onconnectionstatechange = async function (event) {
                 missionId : the_missionId,
                 transcriptId: the_transcriptId
             }
-            await createYourEvaluation_req(data);
+            const the_evaluation = await createYourEvaluation_req(data);
             // window.location.assign(`/evaluation/${the_evaluation._id}`);
 
             // const evaluationInput = {
