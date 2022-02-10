@@ -12,7 +12,7 @@ const evaluationInfo = await readMyEvaluation_req(the_evaluation_id);
 
 document.getElementById('js-score').innerHTML = evaluationInfo.score;
 
-evaluationInfo.words_evaluated.forEach(element => {
+evaluationInfo.missionWordsEvaluated.forEach(element => {
     let li_element = document.createElement('li');
     li_element.innerHTML = element.value;
     if(element.score > 0){
