@@ -1,7 +1,7 @@
 // const serverURL_rooms = 'http://localhost:3000';
 const serverURL_MatchService = 'https://webrtc-englingo.herokuapp.com';
 const serverURL_MissionService = 'https://englingo-missions.herokuapp.com';
-const serverURL_EvaluationService = 'https://englingo-evaluation.herokuapp.com';
+const serverURL_EvaluationService = 'https://englingo-evaluations.herokuapp.com';
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
@@ -176,7 +176,7 @@ recognition.onerror = function (event) {
     };
 }
 
-recognition.onspeechend = function() {
+recognition.onspeechend = function () {
     recognition.stop();
 }
 
