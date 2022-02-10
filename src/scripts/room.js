@@ -363,7 +363,6 @@ async function updateUserTranscripts_req(data) {
     } catch (error) {
         return -1;
     }
-
 }
 
 async function createMission_user2_req(data) {
@@ -384,12 +383,16 @@ async function readMissionToMatchId_req() {
 }
 
 async function createYourEvaluation_req(data) {
-    const response = await fetch(`${serverURL_EvaluationService}/evaluations`, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(data)
-    });
-    return response.json();
+    try {
+        const response = await fetch(`${serverURL_EvaluationService}/evaluations`, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        });
+        return response.json();
+    } catch (error) {
+        return -1;
+    }
 }
 
 async function getEvaluationInstance_req() {
