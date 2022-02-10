@@ -44,6 +44,7 @@ peerConnection.onconnectionstatechange = async function (event) {
         console.log("Starting speech recognition");
         recognition.start();
         the_transcriptId = await createUserTranscripts_req(spokenFromSession);
+        console.log(the_transcriptId);
         //Duration of the Call
         setTimeout(() => {
             recognition.stop();
@@ -337,7 +338,7 @@ async function createUserTranscripts_req(data) {
         headers: headers,
         body: JSON.stringify(data)
     });
-    return response;
+    return response.text();
 }
 
 async function updateUserTranscripts_req(data) {
