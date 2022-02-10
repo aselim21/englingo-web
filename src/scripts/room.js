@@ -8,13 +8,20 @@ headers.append('Accept', 'application/json');
 headers.append("Access-Control-Allow-Credentials", "true");
 headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Credentials, Cookie, Set-Cookie, Authorization');
 headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
-const the_match_id = window.location.pathname.split('/')[3]; 
+const the_match_id = window.location.pathname.split('/')[3];
 const the_userId = window.localStorage.userId;
 const the_topic_level1 = window.location.pathname.split('/')[2];
 let the_transcriptId;
 let the_missionId;
 let the_topic_level2;
-let the_mission_words; //array
+let the_mission_words;
+let spokenFromSession = {
+    userId: the_userId,
+    transcriptSentences: [],
+    missionId: the_missionId
+    // topicLev2: the_topic_level2,
+    // missionWords: the_mission_words
+};
 
 const configuration = {
     offerToReceiveAudio: true,
@@ -29,13 +36,31 @@ const offerOptions = {
 let peerConnection = new RTCPeerConnection({ configuration: configuration, iceServers: [{ 'urls': 'stun:stun.l.google.com:19302' }] });
 
 //Monitor the state of the Peer Connection
-peerConnection.onconnectionstatechange = function (event) {
+peerConnection.onconnectionstatechange = async function (event) {
     console.log('State changed ' + peerConnection.connectionState);
     //Start Speech recognition wenn connectionState == connected
 
     if (peerConnection.connectionState == 'connected') {
         console.log("Starting speech recognition");
         recognition.start();
+        the_transcriptId = await createUserTranscripts_req(spokenFromSession);
+        //Duration of the Call
+        setTimeout(() => {
+            recognition.stop();
+            updateUserTranscripts_req(spokenFromSession);
+            closeVideoCall();
+            //POST für evaluation
+            // const evaluationInput = {
+            //     topicLev2: the_topic_level2,
+            //     missionWords: the_mission_words
+            // }
+            // getEvaluationInstance_req().then((the_eval_id) => {
+            //     console.log(the_eval_id)
+            //window.location.assign(`/evaluation/${the_eval_id}`);
+            // })
+
+            //max 1 minute call
+        }, 60000);
     }
 }
 
@@ -50,23 +75,7 @@ setTimeout(() => {
     // 20 seconds
 }, 20000);
 
-//Duration of the Call
-setTimeout(() => {
-    recognition.stop();
-    //updateUserTranscripts_req(spokenFromSession);
-    closeVideoCall();
-    //POST für evaluation
-    // const evaluationInput = {
-    //     topicLev2: the_topic_level2,
-    //     missionWords: the_mission_words
-    // }
-    getEvaluationInstance_req().then((the_eval_id)=>{
-        console.log(the_eval_id)
-        //window.location.assign(`/evaluation/${the_eval_id}`);
-    })
-    
-    //max 1 minute call
-}, 60000);
+
 
 const finish_call_btn = document.getElementById('js-finish-call');
 finish_call_btn.addEventListener("click", async (e) => {
@@ -117,13 +126,7 @@ await startMediaSharing();
 
 
 //-------------------Speech Recognition
-let spokenFromSession = {
-    userId: the_userId,
-    transcriptSentences: [],
-    missionId: the_missionId
-    // topicLev2: the_topic_level2,
-    // missionWords: the_mission_words
-};
+
 
 const SpeechRecognition = window.speechRecognition || window.webkitSpeechRecognition;
 // const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -156,7 +159,7 @@ recognition.onresult = function (event) {
         //save the words in json object through the web server
         updateUserTranscripts_req(spokenFromSession);
         spokenFromSession.transcriptSentences = [];
-       
+
     }
 }
 
@@ -236,7 +239,7 @@ async function createOffer_user1(callback) {
     setTimeout(() => {
         console.log('PUT OFFER');
         callback({ user1_offer: peerConnection.localDescription });
-    // 2000 -> 1500    
+        // 2000 -> 1500    
     }, 1500)
     return offer;
 }
@@ -255,7 +258,7 @@ async function processOfferWhenReady_user2() {
             console.log('staring processOfferWhenReady_user2 again')
             await processOfferWhenReady_user2()
         }
-    // 500 -> 100    
+        // 500 -> 100    
     }, 100)
     return -1;
 }
@@ -271,7 +274,7 @@ async function createAnswerAndConnect_user2(offer, callback) {
         setTimeout(() => {
             console.log("PUT ANSWER");
             callback({ user2_answer: peerConnection.localDescription });
-        // 2000 -> 1500      
+            // 2000 -> 1500      
         }, 1500)
     };
     const remoteDesc = new RTCSessionDescription(offer);
@@ -296,7 +299,7 @@ async function processAnswerWhenReady_user1() {
             console.log('staring processAnswerWhenReady_user1 again')
             await processAnswerWhenReady_user1()
         }
-    // 500 -> 100    
+        // 500 -> 100    
     }, 100)
     return -1;
 }
