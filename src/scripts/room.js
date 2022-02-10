@@ -56,8 +56,8 @@ peerConnection.onconnectionstatechange = async function (event) {
                 missionId : the_missionId,
                 transcriptId: the_transcriptId
             }
-            const the_evaluation = await createYourEvaluation_req(data);
-            window.location.assign(`/evaluation/${the_evaluation._id}`);
+            // const the_evaluation = await createYourEvaluation_req(data);
+            // window.location.assign(`/evaluation/${the_evaluation._id}`);
 
             // const evaluationInput = {
             //     topicLev2: the_topic_level2,
