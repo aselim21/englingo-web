@@ -49,7 +49,7 @@ peerConnection.onconnectionstatechange = async function (event) {
         setTimeout(async function() {
             recognition.stop();
             updateUserTranscripts_req(spokenFromSession);
-            closeVideoCall();
+             closeVideoCall();
             //POST für evaluation
             const data = {
                 userId : the_userId,
@@ -410,7 +410,7 @@ function closeVideoCall() {
         if (localVideo.srcObject) {
             localVideo.srcObject.getTracks().forEach(track => track.stop());
         }
-        alert('Call ended.');
+        //alert('Call ended.');
         peerConnection.close();
         peerConnection = null;
     }
