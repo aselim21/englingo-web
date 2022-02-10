@@ -49,15 +49,17 @@ peerConnection.onconnectionstatechange = async function (event) {
         setTimeout(async function() {
             recognition.stop();
             updateUserTranscripts_req(spokenFromSession);
-             closeVideoCall();
+            //  closeVideoCall();
             //POST für evaluation
             const data = {
                 userId : the_userId,
                 missionId : the_missionId,
                 transcriptId: the_transcriptId
             }
+            console.log("sending the request");
             const the_evaluation = await createYourEvaluation_req(data);
-            // window.location.assign(`/evaluation/${the_evaluation._id}`);
+            console.log(the_evaluation);
+            window.location.assign(`/evaluation/${the_evaluation._id}`);
 
             // const evaluationInput = {
             //     topicLev2: the_topic_level2,
