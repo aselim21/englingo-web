@@ -1,5 +1,5 @@
 const the_userId = window.localStorage.userId;
-const serverURL_EvaluationService = 'https://englingo-evaluation.herokuapp.com';
+const serverURL_EvaluationService = 'https://englingo-evaluations.herokuapp.com';
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
