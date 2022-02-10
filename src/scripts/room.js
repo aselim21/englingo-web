@@ -58,7 +58,7 @@ peerConnection.onconnectionstatechange = async function (event) {
             }
             console.log("sending the request");
             const the_evaluation = await createYourEvaluation_req(data);
-            console.log(the_evaluation._id);
+            console.log(the_evaluation);
             //window.location.assign(`/evaluation/${the_evaluation._id}`);
 
             // const evaluationInput = {
