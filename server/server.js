@@ -91,10 +91,9 @@ app.get('/rooms/:topic/:roomId', (req, res) => {
 //       })
 // });
 
-// app.get('/evaluation/:id', (req,res)=>{
-//     res.sendFile(path.join(__dirname, '../src', 'evaluation.html'));
-
-// });
+app.get('/evaluation/:id', (req,res)=>{
+    res.sendFile(path.join(__dirname, '../src', 'evaluation.html'));
+});
 
 
 // function rewriteFile(file, object, callback) {
