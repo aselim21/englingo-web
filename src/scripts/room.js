@@ -11,6 +11,7 @@ headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS,
 const the_match_id = window.location.pathname.split('/')[3]; 
 const the_userId = window.localStorage.userId;
 const the_topic_level1 = window.location.pathname.split('/')[2];
+let the_transcriptId;
 let the_missionId;
 let the_topic_level2;
 let the_mission_words; //array
@@ -119,9 +120,9 @@ await startMediaSharing();
 let spokenFromSession = {
     userId: the_userId,
     transcriptSentences: [],
-    missionId: the_missionId,
-    topicLev2: the_topic_level2,
-    missionWords: the_mission_words
+    missionId: the_missionId
+    // topicLev2: the_topic_level2,
+    // missionWords: the_mission_words
 };
 
 const SpeechRecognition = window.speechRecognition || window.webkitSpeechRecognition;
@@ -327,8 +328,17 @@ async function deleteMatchInfo_req() {
     return response;
 };
 
+async function createUserTranscripts_req(data) {
+    const response = await fetch(`${serverURL_EvaluationService}/userTranscripts`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data)
+    });
+    return response;
+}
+
 async function updateUserTranscripts_req(data) {
-    const response = await fetch(`/userTranscripts`, {
+    const response = await fetch(`${serverURL_EvaluationService}/userTranscripts/${the_transcriptId}`, {
         method: 'PUT',
         headers: headers,
         body: JSON.stringify(data)
