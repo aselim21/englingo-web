@@ -46,14 +46,14 @@ peerConnection.onconnectionstatechange = async function (event) {
         const the_transcript = await createUserTranscripts_req(spokenFromSession);
         the_transcriptId = the_transcript._id
         //Duration of the Call
-        setTimeout(async function() {
+        setTimeout(async function () {
             recognition.stop();
             updateUserTranscripts_req(spokenFromSession);
             //  closeVideoCall();
             //POST für evaluation
             const data = {
-                userId : the_userId,
-                missionId : the_missionId,
+                userId: the_userId,
+                missionId: the_missionId,
                 transcriptId: the_transcriptId
             }
             console.log("sending the request");
@@ -183,6 +183,7 @@ recognition.onstart = function () {
 recognition.onerror = function (event) {
     if (event.error == 'no-speech') {
         console.error('No speech was detected. Try again.');
+        //TODO: Doesn't start after this
         recognition.stop();
     };
 }
@@ -352,12 +353,17 @@ async function createUserTranscripts_req(data) {
 }
 
 async function updateUserTranscripts_req(data) {
-    const response = await fetch(`${serverURL_EvaluationService}/userTranscripts/${the_transcriptId}`, {
-        method: 'PUT',
-        headers: headers,
-        body: JSON.stringify(data)
-    });
-    return response;
+    try {
+        const response = await fetch(`${serverURL_EvaluationService}/userTranscripts/${the_transcriptId}`, {
+            method: 'PUT',
+            headers: headers,
+            body: JSON.stringify(data)
+        });
+        return response;
+    } catch (error) {
+        return -1;
+    }
+
 }
 
 async function createMission_user2_req(data) {
