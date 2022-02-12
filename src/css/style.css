@@ -1,21 +1,56 @@
-.page-container{
-    padding: 0;
-width: 100%;
-display: block;
-box-sizing: border-box;
+.logo-text{
+    font-size: 2rem;
+    color: white;
+}
+.page-navbar > a{
+    color: white;
+}
+.cycle-item{
+    color: #543454;
+}
+a{
+    text-decoration-line: none;
 }
 .page-navbar{
     padding: 0.5rem 1rem 0.5rem 1rem;
-    background-color:pink;
+    background-color: #543454;
     display: flex;
+    flex-direction:row;
+    justify-content : space-between;
+    align-items : center
 }
+
 .navbar-cycle{
     display: flex;
     flex-wrap: nowrap;
-    background-color:blue;
 }
+.navbar-cycle > .cycle-row{
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: white;
+}
+/* #D6B8D6; */
 .navbar-cycle > .cycle-item{
-    background-color: #f1f1f1;
+    background-color: white;
     font-size: 0.8rem;
     padding: 0.5rem 1rem 0.5rem 1rem;
+    margin : 0rem;
+    border: 0rem;
+    width: 8rem;
+    text-align: center;
+    align-self: center;
+    display: inline-block;
+    border-radius: 10%;
+}
+.cycle-item[active] > a > h2{
+    color: #543454;
+    
+}
+.cycle-item[active]{
+    background-color: #D6B8D6;
+}
+.cycle-item[active] > a > h2:hover{
+
+    color: white;
+    
 }
