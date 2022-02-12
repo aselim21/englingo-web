@@ -46,11 +46,20 @@ peerConnection.onconnectionstatechange = async function (event) {
         const the_transcript = await createUserTranscripts_req(spokenFromSession);
         the_transcriptId = the_transcript._id
         //Duration of the Call
-        setTimeout(() => {
+        setTimeout(async function () {
             recognition.stop();
             updateUserTranscripts_req(spokenFromSession);
-            closeVideoCall();
+            //  closeVideoCall();
             //POST für evaluation
+            const data = {
+                userId: the_userId,
+                missionId: the_missionId,
+                transcriptId: the_transcriptId
+            }
+            console.log("sending the request");
+            const the_evaluation = await createYourEvaluation_req(data);
+            window.location.assign(`/evaluation/${the_evaluation._id}`);
+
             // const evaluationInput = {
             //     topicLev2: the_topic_level2,
             //     missionWords: the_mission_words
@@ -173,6 +182,7 @@ recognition.onstart = function () {
 recognition.onerror = function (event) {
     if (event.error == 'no-speech') {
         console.error('No speech was detected. Try again.');
+        //TODO: Doesn't start after this
         recognition.stop();
     };
 }
@@ -342,12 +352,16 @@ async function createUserTranscripts_req(data) {
 }
 
 async function updateUserTranscripts_req(data) {
-    const response = await fetch(`${serverURL_EvaluationService}/userTranscripts/${the_transcriptId}`, {
-        method: 'PUT',
-        headers: headers,
-        body: JSON.stringify(data)
-    });
-    return response;
+    try {
+        const response = await fetch(`${serverURL_EvaluationService}/userTranscripts/${the_transcriptId}`, {
+            method: 'PUT',
+            headers: headers,
+            body: JSON.stringify(data)
+        });
+        return response;
+    } catch (error) {
+        return -1;
+    }
 }
 
 async function createMission_user2_req(data) {
@@ -356,7 +370,7 @@ async function createMission_user2_req(data) {
         headers: headers,
         body: JSON.stringify(data)
     });
-    return response;
+    return response.json;
 }
 
 async function readMissionToMatchId_req() {
@@ -365,6 +379,19 @@ async function readMissionToMatchId_req() {
         headers: headers
     });
     return response.json();
+}
+
+async function createYourEvaluation_req(data) {
+    try {
+        const response = await fetch(`${serverURL_EvaluationService}/evaluations`, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        });
+        return response.json();
+    } catch (error) {
+        return -1;
+    }
 }
 
 async function getEvaluationInstance_req() {
@@ -393,7 +420,7 @@ function closeVideoCall() {
         if (localVideo.srcObject) {
             localVideo.srcObject.getTracks().forEach(track => track.stop());
         }
-        alert('Call ended.');
+        //alert('Call ended.');
         peerConnection.close();
         peerConnection = null;
     }
