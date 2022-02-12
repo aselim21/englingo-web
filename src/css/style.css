@@ -1,6 +1,7 @@
 .logo-text{
-    font-size: 2rem;
+    font-size: 2.5rem;
     color: white;
+    font-family: 'Satisfy', cursive;
 }
 .page-navbar > a{
     color: white;
@@ -8,9 +9,16 @@
 .cycle-item{
     color: #543454;
 }
+
+*{
+    font-family: 'Open Sans', sans-serif;
+}
+
 a{
     text-decoration-line: none;
 }
+
+
 .page-navbar{
     padding: 0.5rem 1rem 0.5rem 1rem;
     background-color: #543454;
@@ -41,6 +49,7 @@ a{
     align-self: center;
     display: inline-block;
     border-radius: 10%;
+    line-height: 10%;
 }
 .cycle-item[active] > a > h2{
     color: #543454;
