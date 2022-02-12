@@ -16,8 +16,7 @@ app.use((req, res, next) => {
         'https://webrtc-englingo.herokuapp.com',
         'http://127.0.0.1:3000',
         'http://localhost:3000',
-        'https://englingo.herokuapp.com',
-        'https://englingo-evaluation.herokuapp.com'
+        'https://englingo.herokuapp.com'
     ];
     if (corsWhitelist.indexOf(req.headers.origin) !== -1) {
         res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -44,69 +43,69 @@ app.get('/rooms/:topic/:roomId', (req, res) => {
     res.sendFile(path.join(__dirname, '../src', 'room.html'));
 });
 
-app.put('/userTranscripts', (req, res) => {
-    const user_id = req.body.userId;
-    const trancriptedWords = req.body.transcriptSentences;
-    const mission_id = req.body.missionId;
-    const topicLev2 = req.body.topicLev2;
-    const missionWords = req.body.missionWords;
+// app.put('/userTranscripts', (req, res) => {
+//     const user_id = req.body.userId;
+//     const trancriptedWords = req.body.transcriptSentences;
+//     const mission_id = req.body.missionId;
+//     const topicLev2 = req.body.topicLev2;
+//     const missionWords = req.body.missionWords;
 
-    let userTranscripts = JSON.parse(fs.readFileSync('server/userTranscripts.json'));
+//     let userTranscripts = JSON.parse(fs.readFileSync('server/userTranscripts.json'));
 
-    //check mission ID if the same, update, if different, zero and change
-    console.log(mission_id)
-    console.log(userTranscripts.missionId)
-    if(mission_id != userTranscripts.missionId) {
-        console.log("in the if")
-        userTranscripts.userId = user_id;
-        userTranscripts.missionId = mission_id;
-        userTranscripts.transcriptSentences = [];
-        userTranscripts.topicLev2 = topicLev2;
-        userTranscripts.missionWords = missionWords;
-    }
-    userTranscripts.transcriptSentences = userTranscripts.transcriptSentences.concat(trancriptedWords);
-    rewriteFile("server/userTranscripts.json", userTranscripts);
-    res.status(200).send();
-});
+//     //check mission ID if the same, update, if different, zero and change
+//     console.log(mission_id)
+//     console.log(userTranscripts.missionId)
+//     if(mission_id != userTranscripts.missionId) {
+//         console.log("in the if")
+//         userTranscripts.userId = user_id;
+//         userTranscripts.missionId = mission_id;
+//         userTranscripts.transcriptSentences = [];
+//         userTranscripts.topicLev2 = topicLev2;
+//         userTranscripts.missionWords = missionWords;
+//     }
+//     userTranscripts.transcriptSentences = userTranscripts.transcriptSentences.concat(trancriptedWords);
+//     rewriteFile("server/userTranscripts.json", userTranscripts);
+//     res.status(200).send();
+// });
 
-app.get('/myEvaluation', (req, res) => {
+// app.get('/myEvaluation', (req, res) => {
 
-    const data = JSON.parse(fs.readFileSync('server/userTranscripts.json'));
-    console.log(data)
-    // console.log(JSON.stringify(data));
-    // requestify.post(`${serverURL_EvaluationService}/evaluations`, data).then((result)=>{
-    //     res.status(200).send(result.body);        
-    // }).catch(err => {
-    //     console.log(err);
-    //     res.status(400).json("Error: " + JSON.stringify(err));
-    // });
+//     const data = JSON.parse(fs.readFileSync('server/userTranscripts.json'));
+//     console.log(data)
+//     // console.log(JSON.stringify(data));
+//     // requestify.post(`${serverURL_EvaluationService}/evaluations`, data).then((result)=>{
+//     //     res.status(200).send(result.body);        
+//     // }).catch(err => {
+//     //     console.log(err);
+//     //     res.status(400).json("Error: " + JSON.stringify(err));
+//     // });
 
-    // console.log(`${serverURL_EvaluationService}/evaluations`)
-    axios.post(`${serverURL_EvaluationService}/evaluations`, data)
-      .then((response) => {
-          res.send(response.data)
-        // console.log(response);
-      }, (error) => {
-          res.send(error)
-        // console.log(error);
-      })
-});
+//     // console.log(`${serverURL_EvaluationService}/evaluations`)
+//     axios.post(`${serverURL_EvaluationService}/evaluations`, data)
+//       .then((response) => {
+//           res.send(response.data)
+//         // console.log(response);
+//       }, (error) => {
+//           res.send(error)
+//         // console.log(error);
+//       })
+// });
 
 app.get('/evaluation/:id', (req,res)=>{
     res.sendFile(path.join(__dirname, '../src', 'evaluation.html'));
-
 });
 
 
-function rewriteFile(file, object, callback) {
-    fs.writeFile(file, JSON.stringify(object), function (err) {
-        if (err) throw err;
-        console.log(`File updated`);
-    }
-    )
-    if (typeof callback == "function")
-        callback();
-}
+// function rewriteFile(file, object, callback) {
+//     fs.writeFile(file, JSON.stringify(object), function (err) {
+//         if (err) throw err;
+//         console.log(`File updated`);
+//     }
+//     )
+//     if (typeof callback == "function")
+//         callback();
+// }
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~ run server ~~~~~~~~~~~~~~~~~~~~~~~~~
 app.listen(PORT, () => {
     console.log(`Express server listening on port ${PORT}...`);
