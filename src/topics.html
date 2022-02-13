@@ -7,21 +7,66 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room</title>
+    <title>Topics</title>
     <script defer type="module" src="/scripts/topics.js"></script>
-    <!-- <link rel="stylesheet" type="text/css" href="/styles/video.css" /> -->
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/base-min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/variables.css">
 
 </head>
 
 <body>
+    <div class="page-container" style="margin: 0;">
+    
+        <nav class="page-navbar">
+            <a href="index.html" class="navbar-logo">
+                <h1 class="logo-text">Englingo</h1>
+            </a>
+            <div class="navbar-cycle">
+                <div class="cycle-item" active>
+                    <a href="topics.html" class="cycle-item-link">
+                        <h2>Topics</h2>
+                    </a>
+                </div>
+                <div class="cycle-row">
+                    <h2>→</h2>
+                </div>
+                <div class="cycle-item" >
+                    <a class="cycle-item-link">
+                        <h2>Mission Call</h2>
+                    </a>
+                </div>
+                <div class="cycle-row">
+                    <h2>→</h2>
+                </div>
+                <div class="cycle-item" >
+                    <a class="cycle-item-link">
+                        <h2>Score</h2>
+                    </a>
+                </div>
+            </div>
+            <a href="aboutus.html">
+                <h2>About us</h2>
+            </a>
 
-    <h1>Welcome to Englingo</h1>
-
-    <h2>Participate in topic</h2>
-    <div id="js-topic-buttons">
-        <button id="js-topic1-button" topic="books">Books</button> 
-        <button id="js-topic2-button" topic="family">Family</button> 
-        <button id="js-topic3-button" topic="relationships">Relationships</button> 
+        </nav>
+        <div class="topic-container">
+            <h1>Let's participate in one of the topics</h1>
+            <div id="js-topic-buttons">
+            <div class="topic-box">    
+            <img src="images/Clipart_Books.jpg">
+            <button id="js-topic1-button" topic="books">Books</button> 
+            </div>
+            <div class="topic-box">     
+            <img src="images/Clipart_Family.jpg">     
+            <button id="js-topic2-button" topic="family">Family</button> 
+            </div>    
+            <div class="topic-box">      
+            <img src="images/Clipart-Relationship.jpg">                 
+            <button id="js-topic3-button" topic="relationships">Relationships</button> 
+            </div>    
+            </div>
+        </div>    
     </div>
 
 </body>
