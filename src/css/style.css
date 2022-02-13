@@ -1,3 +1,16 @@
+/* General */
+body{
+    background-color: #e7dbe7;
+    min-width:200px;        /* Suppose you want minimum width of 1000px */
+    width: auto !important;  /* Firefox will set width as auto */
+    width:1000px;            /* As IE6 ignores !important it will set width as 1000px; */
+}
+*{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.90rem;
+}
+
+/* Navbar  */
 .logo-text{
     font-size: 2.5rem;
     color: white;
@@ -9,27 +22,22 @@
 .cycle-item{
     color: #543454;
 }
-
-*{
-    font-family: 'Open Sans', sans-serif;
-}
-
-h1{
+/* h1{
     font-size: var(--xl);
-}
+} */
 
-h2{
+/* h2{
     font-size: var(--l);
-}
+} */
 
 a{
     text-decoration-line: none;
-    font-size: var(--m);
+    /* font-size: var(--m); */
 }
 
-.page-container{
+/* .page-container{
     height: 100%;
-}
+} */
 
 .page-navbar{
     padding: 0.5rem 1rem 0.5rem 1rem;
@@ -37,7 +45,8 @@ a{
     display: flex;
     flex-direction:row;
     justify-content : space-between;
-    align-items : center
+    align-items : center;
+    height: 4rem;
 }
 
 .navbar-cycle{
@@ -71,54 +80,51 @@ a{
     background-color: #D6B8D6;
 }
 .cycle-item[active] > a > h2:hover{
-
     color: white;
-    
 }
 
+/* Index.html */
 .content-container{
-    background-color: #e7dbe7;
+    padding-top: 6rem;
     display: flex;
-    flex-flow: row;
+    flex-direction:row;
     flex-wrap: wrap;
+    justify-content : space-evenly;
+    align-items : center;
 }
 
 .content-box-child{
     background-color: white;
-    flex: 1;
-    padding: 10rem;
-    margin: 10rem;
+    /* flex: 1; */
+    /* padding: 10rem;
+    margin: 10rem; */
+    width: 30rem;
+    height: 30rem;
     border-radius: 10%;
-    height: 200px ;
+    /* height: 200px ; */
     align-self: center;
     justify-content: center;
-}
-
-.intro{
     text-align: center;
 }
 
 button {
     padding: 15px 30px;
     font-size: var(--l);
-    text-align: center;
-    cursor: pointer;
+    align-self: center;
     outline: none;
     color: #fff;
     background-color: #543454;
     border: none;
     border-radius: 10px;
-    box-shadow: 0 3px #999;
+    box-shadow: 0 2px #999;
   }
-
-.photo {
-    display: flex;
-} 
 
 .content-box-child > img {
     display: flex;
     width: 120%;
 }
+
+/* Topic.html  */
 
 .topic-container{
     display: flex; 
@@ -130,4 +136,136 @@ button {
 
 .topic-box > img {
     width: 40%;
+}
+
+/* Room.html */
+.room-content-container{
+    padding-top: 1rem;
+    /* display: flex;
+    flex-direction:column;
+    flex-wrap: wrap;
+    justify-content : space-evenly;
+    align-items : center;
+     */
+    /* padding-bottom: 10rem; */
+
+}
+.countdown{
+    align-self: center;
+    text-align: center;
+    /* grid-column-start: 1;
+    grid-column-end: 1; */
+    /* grid-row-start: row1-start;
+    grid-row-end: ; */
+}
+.mission-container{
+    display: flex;
+    flex-direction:row;
+    flex-wrap: wrap;
+    justify-content : space-evenly;
+    align-items : center;
+}
+.mission-info-container{
+    background-color: white;
+    width: 30rem;
+    height: 30rem;
+    border-radius: 10%;
+}
+.mission-info-elements{
+    padding: 4.5rem;
+    
+}
+.mission-info-elements > * , li{
+    font-size: 1.2rem;
+}
+.match-video-container{
+    position: relative;
+    background-color: wheat;
+    width: 30rem;
+    height: 30rem;
+    border-radius: 10%;
+}
+
+.my-video-container{
+    position: absolute;
+    background-color: paleturquoise;
+    margin: 0;
+    height: 5rem;
+    width: 5rem;
+    right: 1rem;
+    bottom: 1rem;
+    border-radius: 10%;
+}
+
+#countdown-clock{
+    margin: 0rem;
+    font-size: 1.5rem;
+
+}
+.speech-output-container{
+    margin: 2rem 15rem 0.5rem 15rem;
+    background-color: white;
+    height: 6rem;
+    display: grid;
+}
+#js-speech-ul{
+    resize:none;
+    font-size: 1rem;
+}
+.room-content-header{
+    /* display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 80% 20%; */
+}
+.room-finish-line{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+}
+.room-finish-btn{
+    grid-column-start: 6;
+    grid-column-end: 6;
+    justify-content: center; 
+  align-items: center;
+}
+
+/* button {
+    padding: 0.9rem 1.5rem;
+    font-size: var(--l);
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #543454;
+    font-weight: bold;
+    background-color: #D6B8D6;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px #999;
+  } */
+
+button:hover {
+    background-color: #D6B8D6;
+    color: #543454;
+}
+button:active {
+    background-color: #442a44;
+    color: white;
+}
+#remoteVideo{
+    position: relative;
+    background-color: wheat;
+    width: 30rem;
+    height: 30rem;
+    border-radius: 10%;
+
+}
+#webcamVideo{   
+    position: initial;
+    background-color: paleturquoise;
+    margin: 0;
+    height: 5rem;
+    width: 5rem;
+    right: 1rem;
+    bottom: 1rem;
+    border-radius: 10%;
+     
 }
