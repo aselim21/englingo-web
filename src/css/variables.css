@@ -1,0 +1,9 @@
+:root {
+    --bfs: 0.5rem;
+    --xs: calc(var(--bfs) * 1.25);
+    --s: calc(var(--bfs) * 1.6);
+    --m: calc(var(--bfs) * 2);
+    --l: calc(var(--bfs) * 2.5);
+    --xl: calc(var(--bfs) * 3.15);
+    --xxl: calc(var(--bfs) * 4);
+}

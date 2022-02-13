@@ -14,8 +14,17 @@
     font-family: 'Open Sans', sans-serif;
 }
 
+h1{
+    font-size: var(--xl);
+}
+
+h2{
+    font-size: var(--l);
+}
+
 a{
     text-decoration-line: none;
+    font-size: var(--m);
 }
 
 .page-container{
@@ -74,16 +83,26 @@ a{
     flex-wrap: wrap;
 }
 
-.content-box-large{
+.content-box-child{
     background-color: white;
+    flex: 1;
     padding: 10rem;
     margin: 10rem;
-    text-align: center;
-    align-self: center;
     border-radius: 10%;
-    width: 50%;
+    height: 200px ;
+    align-self: center;
+    justify-content: center;
 }
 
-.content-box-large > img {
-    width: 50%;
- }
+.intro{
+    text-align: center;
+}
+
+.photo {
+    display: flex;
+} 
+
+.content-box-child > img {
+    display: flex;
+    width: 120%;
+}
