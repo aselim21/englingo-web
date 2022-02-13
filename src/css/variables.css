@@ -6,4 +6,6 @@
     --l: calc(var(--bfs) * 2.5);
     --xl: calc(var(--bfs) * 3.15);
     --xxl: calc(var(--bfs) * 4);
+    --xxxl: 2.5rem;
+
 }
