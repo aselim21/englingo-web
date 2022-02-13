@@ -8,6 +8,7 @@ headers.append('Accept', 'application/json');
 headers.append("Access-Control-Allow-Credentials", "true");
 headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Credentials, Cookie, Set-Cookie, Authorization');
 headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
+const transcriptTxtBox = document.getElementById('js-speech-ul');
 const the_match_id = window.location.pathname.split('/')[3];
 const the_userId = window.localStorage.userId;
 const the_topic_level1 = window.location.pathname.split('/')[2];
@@ -31,7 +32,28 @@ const offerOptions = {
     offerToReceiveAudio: 1,
     offerToReceiveVideo: 1
 };
-
+//to test
+// let transcriptElement = document.createElement('li');
+// let textElement = document.createTextNode('TEST');
+// transcriptElement.appendChild(textElement);
+// document.getElementById("js-speech-ul").appendChild(transcriptElement);
+// transcriptElement = document.createElement('li');
+// textElement = document.createTextNode('TEST');
+// transcriptElement.appendChild(textElement);
+// document.getElementById("js-speech-ul").appendChild(transcriptElement);
+// transcriptElement = document.createElement('li');
+// textElement = document.createTextNode('TEST');
+// transcriptElement.appendChild(textElement);
+// document.getElementById("js-speech-ul").appendChild(transcriptElement);
+// transcriptElement = document.createElement('li');
+// textElement = document.createTextNode('TEST');
+// transcriptElement.appendChild(textElement);
+// document.getElementById("js-speech-ul").appendChild(transcriptElement);
+// transcriptElement = document.createElement('li');
+// textElement = document.createTextNode('TEST');
+// transcriptElement.appendChild(textElement);
+// document.getElementById("js-speech-ul").appendChild(transcriptElement);
+//end test
 
 let peerConnection = new RTCPeerConnection({ configuration: configuration, iceServers: [{ 'urls': 'stun:stun.l.google.com:19302' }] });
 
@@ -41,23 +63,23 @@ peerConnection.onconnectionstatechange = async function (event) {
     //Start Speech recognition wenn connectionState == connected
 
     if (peerConnection.connectionState == 'connected') {
-        console.log("Starting speech recognition");
         recognition.start();
+        startCountdown();
         const the_transcript = await createUserTranscripts_req(spokenFromSession);
         the_transcriptId = the_transcript._id
         //Duration of the Call
         setTimeout(async function () {
             recognition.stop();
             updateUserTranscripts_req(spokenFromSession);
-            //  closeVideoCall();
+            closeVideoCall();
             //POST für evaluation
             const data = {
                 userId: the_userId,
                 missionId: the_missionId,
                 transcriptId: the_transcriptId
             }
-            console.log("sending the request");
             const the_evaluation = await createYourEvaluation_req(data);
+            deleteMatchInfo_req();
             window.location.assign(`/evaluation/${the_evaluation._id}`);
 
             // const evaluationInput = {
@@ -69,8 +91,8 @@ peerConnection.onconnectionstatechange = async function (event) {
             //window.location.assign(`/evaluation/${the_eval_id}`);
             // })
 
-            //max 1 minute call
-        }, 60000);
+            //max 10 minutes call 10 * 60s
+        }, 600000);
     }
 }
 
@@ -91,6 +113,16 @@ const finish_call_btn = document.getElementById('js-finish-call');
 finish_call_btn.addEventListener("click", async (e) => {
     deleteMatchInfo_req();
     closeVideoCall();
+    recognition.stop();
+    updateUserTranscripts_req(spokenFromSession);
+    //POST für evaluation
+    const data = {
+        userId: the_userId,
+        missionId: the_missionId,
+        transcriptId: the_transcriptId
+    }
+    const the_evaluation = await createYourEvaluation_req(data);
+    window.location.assign(`/evaluation/${the_evaluation._id}`);
 });
 
 let dataChannel;
@@ -161,15 +193,14 @@ recognition.onresult = function (event) {
     // .transcript = read-only, returns a string containing the transcript of the recognized word
     var transcript = event.results[current][0].transcript;
     spokenFromSession.transcriptSentences.push(transcript);
-    console.log(spokenFromSession.transcriptSentences);
-
+    transcriptTxtBox.innerText = spokenFromSession.transcriptSentences;
     //After 5 sentences restart the speech recognition, because speech recognition cannot record longer than 5 mins.
     //This is to prevent errors.
     if (numberSentancesSpoken % 5 == 0) {
         //save the words in json object through the web server
         updateUserTranscripts_req(spokenFromSession);
         spokenFromSession.transcriptSentences = [];
-
+        transcriptTxtBox.innerText = [];
     }
 }
 
@@ -424,4 +455,33 @@ function closeVideoCall() {
         peerConnection.close();
         peerConnection = null;
     }
+}
+
+// ~~~~~~~~~~~~~~~~~~~~Countdown Clock~~~~~~~~~~~~~~~~~~~~
+function startCountdown() {
+    const countDownDate = new Date();
+    countDownDate.setMinutes(countDownDate.getMinutes() + 10);
+    setInterval(function () {
+
+        // Get today's date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output the result in an element with id="demo"
+        document.getElementById("countdown-clock").innerHTML = "0" + minutes + " : " + seconds;
+
+        // If the count down is over, write some text 
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdown-clock").innerHTML = "END";
+        }
+    }, 1000);
 }

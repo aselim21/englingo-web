@@ -1,0 +1,205 @@
+/* General */
+*{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.90rem;
+}
+body{
+    background-color: #e7dbe7;
+    min-width:200px;        /* Suppose you want minimum width of 1000px */
+    width: auto !important;  
+    /* Firefox will set width as auto */
+    width:1000px;           
+     /* As IE6 ignores !important it will set width as 1000px; */
+}
+/* Room  */
+
+.logo-text{
+    font-size: 2.5rem;
+    color: white;
+    font-family: 'Satisfy', cursive;
+}
+.page-navbar > a{
+    color: white;
+}
+.cycle-item{
+    color: #543454;
+}
+a{
+    text-decoration-line: none;
+}
+
+.page-navbar{
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    background-color: #543454;
+    display: flex;
+    flex-direction:row;
+    justify-content : space-between;
+    align-items : center;
+    height: 4rem;
+}
+
+.navbar-cycle{
+    display: flex;
+    flex-wrap: nowrap;
+}
+.navbar-cycle > .cycle-row{
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: white;
+}
+/* #D6B8D6; */
+.navbar-cycle > .cycle-item{
+    background-color: white;
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    margin : 0rem;
+    border: 0rem;
+    width: 8rem;
+    text-align: center;
+    align-self: center;
+    display: inline-block;
+    border-radius: 10%;
+    line-height: 10%;
+}
+.cycle-item[active] > a > h2{
+    color: #543454;
+    
+}
+.cycle-item[active]{
+    background-color: #D6B8D6;
+}
+.cycle-item[active] > a > h2:hover{
+    color: white;
+}
+
+/* Room.html */
+.room-content-container{
+    padding-top: 1rem;
+    /* display: flex;
+    flex-direction:column;
+    flex-wrap: wrap;
+    justify-content : space-evenly;
+    align-items : center;
+     */
+    /* padding-bottom: 10rem; */
+
+}
+.countdown{
+    align-self: center;
+    text-align: center;
+    /* grid-column-start: 1;
+    grid-column-end: 1; */
+    /* grid-row-start: row1-start;
+    grid-row-end: ; */
+}
+.mission-container{
+    display: flex;
+    flex-direction:row;
+    flex-wrap: wrap;
+    justify-content : space-evenly;
+    align-items : center;
+}
+.mission-info-container{
+    background-color: white;
+    width: 30rem;
+    height: 30rem;
+    border-radius: 10%;
+}
+.mission-info-elements{
+    padding: 5rem;
+    
+}
+.mission-info-elements > * , li{
+    font-size: 1.2rem;
+}
+.match-video-container{
+    position: relative;
+    background-color: wheat;
+    width: 30rem;
+    height: 30rem;
+    border-radius: 10%;
+}
+
+.my-video-container{
+    position: absolute;
+    background-color: paleturquoise;
+    margin: 0;
+    height: 5rem;
+    width: 5rem;
+    right: 1rem;
+    bottom: 1rem;
+    border-radius: 10%;
+}
+
+#countdown-clock{
+    margin: 0rem;
+    font-size: 1.5rem;
+
+}
+.speech-output-container{
+    margin: 2rem 15rem 0.5rem 15rem;
+    background-color: white;
+    height: 6rem;
+    display: grid;
+}
+#js-speech-ul{
+    resize:none;
+    font-size: 1rem;
+}
+.room-content-header{
+    /* display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 80% 20%; */
+}
+.room-finish-line{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+}
+.room-finish-btn{
+    grid-column-start: 6;
+    grid-column-end: 6;
+    justify-content: center; 
+  align-items: center;
+}
+
+button {
+    padding: 0.9rem 1.5rem;
+    font-size: var(--l);
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #543454;
+    font-weight: bold;
+    background-color: #D6B8D6;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px #999;
+  }
+
+button:hover {
+    background-color: #543454;
+    color: white;
+}
+button:active {
+    background-color: #442a44;
+    color: white;
+}
+#remoteVideo{
+    position: relative;
+    background-color: wheat;
+    width: 30rem;
+    height: 30rem;
+    border-radius: 10%;
+
+}
+#webcamVideo{   
+    position: initial;
+    background-color: paleturquoise;
+    margin: 0;
+    height: 5rem;
+    width: 5rem;
+    right: 1rem;
+    bottom: 1rem;
+    border-radius: 10%;
+     
+}
