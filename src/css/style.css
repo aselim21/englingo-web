@@ -98,6 +98,19 @@ a{
     text-align: center;
 }
 
+button {
+    padding: 15px 30px;
+    font-size: var(--l);
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #543454;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 3px #999;
+  }
+
 .photo {
     display: flex;
 } 
