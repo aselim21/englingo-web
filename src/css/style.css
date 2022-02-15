@@ -93,7 +93,6 @@ a{
     align-items : center;
 }
 
-
 button {
     padding: 15px 30px;
     font-size: var(--l);
@@ -126,16 +125,19 @@ button {
 /* Topic.html  */
 
 .topic-container{
-    display: flex; 
-    gap: 10px;
+    display: flex;
+    text-align: center; 
 } 
 
 .topic-box {
+    flex: 33.33%;
+    padding: 15px;
 }
 
 .topic-box > img {
-    width: 40%;
+    width: 100%;
 }
+
 
 /* Room.html */
 .room-content-container{
