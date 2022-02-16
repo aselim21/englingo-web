@@ -32,28 +32,7 @@ const offerOptions = {
     offerToReceiveAudio: 1,
     offerToReceiveVideo: 1
 };
-//to test
-// let transcriptElement = document.createElement('li');
-// let textElement = document.createTextNode('TEST');
-// transcriptElement.appendChild(textElement);
-// document.getElementById("js-speech-ul").appendChild(transcriptElement);
-// transcriptElement = document.createElement('li');
-// textElement = document.createTextNode('TEST');
-// transcriptElement.appendChild(textElement);
-// document.getElementById("js-speech-ul").appendChild(transcriptElement);
-// transcriptElement = document.createElement('li');
-// textElement = document.createTextNode('TEST');
-// transcriptElement.appendChild(textElement);
-// document.getElementById("js-speech-ul").appendChild(transcriptElement);
-// transcriptElement = document.createElement('li');
-// textElement = document.createTextNode('TEST');
-// transcriptElement.appendChild(textElement);
-// document.getElementById("js-speech-ul").appendChild(transcriptElement);
-// transcriptElement = document.createElement('li');
-// textElement = document.createTextNode('TEST');
-// transcriptElement.appendChild(textElement);
-// document.getElementById("js-speech-ul").appendChild(transcriptElement);
-//end test
+
 
 let peerConnection = new RTCPeerConnection({ configuration: configuration, iceServers: [{ 'urls': 'stun:stun.l.google.com:19302' }] });
 
@@ -93,6 +72,20 @@ peerConnection.onconnectionstatechange = async function (event) {
 
             //max 10 minutes call 10 * 60s
         }, 600000);
+    }
+    if (peerConnection.connectionState == 'disconnected'){
+        deleteMatchInfo_req();
+    closeVideoCall();
+    recognition.stop();
+    updateUserTranscripts_req(spokenFromSession);
+    //POST für evaluation
+    const data = {
+        userId: the_userId,
+        missionId: the_missionId,
+        transcriptId: the_transcriptId
+    }
+    const the_evaluation = await createYourEvaluation_req(data);
+    window.location.assign(`/evaluation/${the_evaluation._id}`);
     }
 }
 
