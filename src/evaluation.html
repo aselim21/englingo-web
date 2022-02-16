@@ -10,7 +10,7 @@
     <title>Evaluation</title>
     <script defer type="module" src="/scripts/evaluation.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/base-min.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,24 +54,38 @@
                 <h2>About us</h2>
             </a>
         </nav>
-    
-    <h2>Your Score:</h2>
-    <h1 id="js-score"></h1>
+        <div class="content-container-eval">
+            <div class="text-container">
+                <h2 class="page-header">Your Score:</h2>
+                <h2 id="js-score" class="score-res">50</h2>
 
 
-    <h3>Successful</h3>
-    <ol id="js-successful-list">
+                <div class="score-flexbox">
+                    <div class="score-success">
+                        <h3>Successful</h3>
+                        <ol id="js-successful-list">
+                            <li>Test123456</li>
+                            <li>Test</li>
+                            <li>Test555</li>
+                        </ol>
+                    </div>
+                    <div class="score-fail">
+                        <h3>Failed</h3>
+                        <ol id="js-failed-list">
+                            <li>Test</li>
+                            <li>Test545</li>
+                            <li>Test545444</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="restart-btn">
+                <a href="../topics.html"><button>Restart</button></a>
+            </div>
 
-    </ol>
 
-    <h3>Failed</h3>
-    <ol id="js-failed-list">
-
-    </ol>
-
-    <a href="../topics.html"><button>Restart</button></a>
-
-</div>
+        </div>
+    </div>
 
 </body>
 
