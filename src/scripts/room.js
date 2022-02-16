@@ -188,7 +188,7 @@ recognition.onresult = function (event) {
     // .transcript = read-only, returns a string containing the transcript of the recognized word
     var transcript = event.results[current][0].transcript;
     spokenFromSession.transcriptSentences.push(transcript);
-    if( transcriptTxtBox.innerText.length == 4) transcriptTxtBox.innerText = transcriptTxtBox.innerText.slice(4);
+  
     transcriptTxtBox.innerText = spokenFromSession.transcriptSentences;
     //After 5 sentences restart the speech recognition, because speech recognition cannot record longer than 5 mins.
     //This is to prevent errors.
