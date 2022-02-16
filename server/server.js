@@ -91,7 +91,7 @@ app.get('/rooms/:topic/:roomId', (req, res) => {
 //       })
 // });
 
-app.get('/evaluation/:id', (req,res)=>{
+app.get('/rooms/evaluation/:id', (req,res)=>{
     res.sendFile(path.join(__dirname, '../src', 'evaluation.html'));
 });
 

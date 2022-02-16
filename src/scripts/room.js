@@ -85,7 +85,7 @@ peerConnection.onconnectionstatechange = async function (event) {
         transcriptId: the_transcriptId
     }
     const the_evaluation = await createYourEvaluation_req(data);
-    window.location.assign(`../src/evaluation/${the_evaluation._id}`);
+    window.location.assign(`../evaluation/${the_evaluation._id}`);
     }
 }
 
