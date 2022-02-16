@@ -205,8 +205,11 @@ button {
 .info-elements{
     padding: 4.5rem;
 }
-.info-elements > * , li{
+.info-elements > h4 , li{
     font-size: 1.2rem;
+}
+.info-elements > h2{
+    font-size: 1.5rem;
 }
 
 .match-video-container{
