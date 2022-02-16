@@ -102,15 +102,17 @@ a{
     font-size: 1.5rem;
     margin-top: 0rem;
 }
+
 button {
-    padding: 15px 30px;
+    padding: 1rem 2rem;
+    /* padding: 15px 30px; */
     font-size: var(--l);
     align-self: center;
     outline: none;
     color: #fff;
     background-color: #543454;
     border: none;
-    border-radius: 10px;
+    border-radius: 10%;
     box-shadow: 0 2px #999;
   }
 
