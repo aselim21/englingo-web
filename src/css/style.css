@@ -53,6 +53,12 @@ a{
     display: flex;
     flex-wrap: nowrap;
 }
+
+@media (max-width: 800px) {
+    .navbar-cycle { 
+        display: none; }
+}
+
 .navbar-cycle > .cycle-row{
     padding-left: 1rem;
     padding-right: 1rem;
