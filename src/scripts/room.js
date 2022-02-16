@@ -85,7 +85,7 @@ peerConnection.onconnectionstatechange = async function (event) {
         transcriptId: the_transcriptId
     }
     const the_evaluation = await createYourEvaluation_req(data);
-    window.location.assign(`/evaluation/${the_evaluation._id}`);
+    window.location.assign(`../src/evaluation/${the_evaluation._id}`);
     }
 }
 
@@ -148,6 +148,7 @@ async function startMediaSharing() {
         peerConnection.addTrack(track, localStream);
     });
     localVideo.srcObject = localStream_toDisplay;
+    localVideo.msHorizontalMirror = true;
 
     peerConnection.ontrack = function (event) {
         console.log('track received');
@@ -155,6 +156,7 @@ async function startMediaSharing() {
             remoteStream.addTrack(track);
         })
         remoteVideo.srcObject = remoteStream;
+        remoteVideo.msHorizontalMirror = true;
     }
 }
 await startMediaSharing();
