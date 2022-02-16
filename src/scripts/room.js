@@ -59,7 +59,7 @@ peerConnection.onconnectionstatechange = async function (event) {
             }
             const the_evaluation = await createYourEvaluation_req(data);
             deleteMatchInfo_req();
-            window.location.assign(`/evaluation/${the_evaluation._id}`);
+            window.location.assign(`../../evaluation/${the_evaluation._id}`);
 
             // const evaluationInput = {
             //     topicLev2: the_topic_level2,
@@ -85,7 +85,7 @@ peerConnection.onconnectionstatechange = async function (event) {
         transcriptId: the_transcriptId
     }
     const the_evaluation = await createYourEvaluation_req(data);
-    window.location.assign(`../evaluation/${the_evaluation._id}`);
+    window.location.assign(`../../evaluation/${the_evaluation._id}`);
     }
 }
 
@@ -95,7 +95,7 @@ setTimeout(() => {
         alert("Your match left.");
         deleteMatchInfo_req();
         closeVideoCall();
-        window.location.replace(`/home`);
+        window.location.replace(`../../home`);
     }
     // 20 seconds
 }, 20000);
@@ -115,7 +115,7 @@ finish_call_btn.addEventListener("click", async (e) => {
         transcriptId: the_transcriptId
     }
     const the_evaluation = await createYourEvaluation_req(data);
-    window.location.assign(`/evaluation/${the_evaluation._id}`);
+    window.location.assign(`../../evaluation/${the_evaluation._id}`);
 });
 
 let dataChannel;
