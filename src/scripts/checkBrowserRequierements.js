@@ -19,6 +19,6 @@ function Alert_Browser(){
     alert("We detected that you are not using Chrome Browser. Please change your browser to have the best experience. Some functionalities are not supported from other browsers.");
 }
 
-// checkProtocol();
+checkProtocol();
 const correctBrowser = checkBrowser();
 if(!correctBrowser) Alert_Browser()
