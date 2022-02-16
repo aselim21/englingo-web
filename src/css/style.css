@@ -98,11 +98,13 @@ a{
     justify-content : space-evenly;
     align-items : center;
 }
-.mission-info-elements > h3{
+.info-elements > h3{
     font-size: 1.5rem;
     margin-top: 0rem;
 }
-
+.info-elements > p{
+    font-size: 1.2rem;
+}
 button {
     padding: 1rem 2rem;
     /* padding: 15px 30px; */
@@ -205,8 +207,11 @@ button {
 .info-elements{
     padding: 4.5rem;
 }
-.info-elements > * , li{
+.info-elements > h4 , li{
     font-size: 1.2rem;
+}
+.info-elements > h2{
+    font-size: 1.5rem;
 }
 
 .match-video-container{
