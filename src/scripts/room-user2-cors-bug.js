@@ -6,14 +6,12 @@ const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
 headers.append("Access-Control-Allow-Credentials", "true");
-headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Credentials, Cookie, Set-Cookie');
+headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Credentials, Cookie, Set-Cookie, Authorization');
 headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
 const transcriptTxtBox = document.getElementById('js-speech-ul');
 const the_match_id = window.location.pathname.split('/')[3];
 const the_userId = window.localStorage.userId;
 const the_topic_level1 = window.location.pathname.split('/')[2];
-console.log("the_topic_level1: ",the_topic_level1)
-console.log("the_match_id: ",the_match_id)
 let the_transcriptId;
 let the_missionId;
 let the_topic_level2;
@@ -240,9 +238,7 @@ if (the_userId == matchInfo.user2_id) {
         user2_id: matchInfo.user2_id,
         match_id: the_match_id
     }
-    console.log(missionInput);
-    const mission_id_res = await createMission_user2_req(missionInput);
-    console.log(mission_id_res);
+    await createMission_user2_req(missionInput);
     await displayMissionDataWhenReady();
     //User 2 Processing Offer
     await processOfferWhenReady_user2();
@@ -395,18 +391,12 @@ async function updateUserTranscripts_req(data) {
 }
 
 async function createMission_user2_req(data) {
-    try {
-     const response = await fetch(`${serverURL_MissionService}/missions`, {
+    const response = await fetch(`${serverURL_MissionService}/missions`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
     });
-    return response.json();
-    } catch (error) {
-        console.log(error);
-        return -1;
-    }
-    
+    return response.json;
 }
 
 async function readMissionToMatchId_req() {
