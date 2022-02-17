@@ -1,6 +1,4 @@
 const express = require('express');
-var requestify = require('requestify');
-const axios = require('axios')
 const app = express();
 const path = require('path');
 app.use(express.json());
@@ -10,8 +8,6 @@ const PORT = process.env.PORT || 3000;
 app.use((req, res, next) => {
     const corsWhitelist = [
         'https://webrtc-englingo.herokuapp.com',
-        'http://127.0.0.1:3000',
-        'http://localhost:3000',
         'https://englingo.herokuapp.com'
     ];
     if (corsWhitelist.indexOf(req.headers.origin) !== -1) {
