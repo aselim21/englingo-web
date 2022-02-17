@@ -7,26 +7,75 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation</title>
     <script defer type="module" src="/scripts/evaluation.js"></script>
-    <title>Document</title>
+    <script defer type="module" src="/scripts/checkBrowserRequierements.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/base-min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/variables.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <h2>Your Score:</h2>
-    <h1 id="js-score"></h1>
-
-
-    <h3>Successful</h3>
-    <ol id="js-successful-list">
-
-    </ol>
-
-    <h3>Failed</h3>
-    <ol id="js-failed-list">
-
-    </ol>
-
-
+    <div class="page-container" style="margin: 0;">
+        <nav class="page-navbar">
+            <a href="../index.html" class="navbar-logo">
+                <h1 class="logo-text">Englingo</h1>
+            </a>
+            <div class="navbar-cycle">
+                <div class="cycle-item" active>
+                    <a href="../topics.html" class="cycle-item-link">
+                        <h2>Topics</h2>
+                    </a>
+                </div>
+                <div class="cycle-row">
+                    <h2>→</h2>
+                </div>
+                <div class="cycle-item" active>
+                    <a href class="cycle-item-link">
+                        <h2>Mission Call</h2>
+                    </a>
+                </div>
+                <div class="cycle-row">
+                    <h2>→</h2>
+                </div>
+                <div class="cycle-item" active>
+                    <a href class="cycle-item-link">
+                        <h2>Score</h2>
+                    </a>
+                </div>
+            </div>
+            <a href="../aboutus.html">
+                <h2>About us</h2>
+            </a>
+        </nav>
+        <div class="content-container-eval">
+            <div class="text-container">
+                <h2 class="page-header">Your Score:</h2>
+                <h2 id="js-score" class="score-res">50</h2>
+                <div class="score-flexbox">
+                    <div class="score-success">
+                        <h3>Successful</h3>
+                        <ol id="js-successful-list">
+                        </ol>
+                    </div>
+                    <div class="score-fail">
+                        <h3>Failed</h3>
+                        <ol id="js-failed-list">
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="restart-btn">
+                <a href="../topics.html"><button>Restart</button></a>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

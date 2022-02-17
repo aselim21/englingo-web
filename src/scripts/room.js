@@ -1,4 +1,3 @@
-// const serverURL_rooms = 'http://localhost:3000';
 const serverURL_MatchService = 'https://webrtc-englingo.herokuapp.com';
 const serverURL_MissionService = 'https://englingo-missions.herokuapp.com';
 const serverURL_EvaluationService = 'https://englingo-evaluations.herokuapp.com';
@@ -8,6 +7,7 @@ headers.append('Accept', 'application/json');
 headers.append("Access-Control-Allow-Credentials", "true");
 headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Credentials, Cookie, Set-Cookie, Authorization');
 headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
+const transcriptTxtBox = document.getElementById('js-speech-ul');
 const the_match_id = window.location.pathname.split('/')[3];
 const the_userId = window.localStorage.userId;
 const the_topic_level1 = window.location.pathname.split('/')[2];
@@ -19,8 +19,6 @@ let spokenFromSession = {
     userId: the_userId,
     transcriptSentences: [],
     missionId: the_missionId
-    // topicLev2: the_topic_level2,
-    // missionWords: the_mission_words
 };
 
 const configuration = {
@@ -38,39 +36,42 @@ let peerConnection = new RTCPeerConnection({ configuration: configuration, iceSe
 //Monitor the state of the Peer Connection
 peerConnection.onconnectionstatechange = async function (event) {
     console.log('State changed ' + peerConnection.connectionState);
-    //Start Speech recognition wenn connectionState == connected
-
+    //Start Speech recognition when connectionState == connected
     if (peerConnection.connectionState == 'connected') {
-        console.log("Starting speech recognition");
         recognition.start();
+        startCountdown();
         const the_transcript = await createUserTranscripts_req(spokenFromSession);
         the_transcriptId = the_transcript._id
         //Duration of the Call
         setTimeout(async function () {
             recognition.stop();
             updateUserTranscripts_req(spokenFromSession);
-            //  closeVideoCall();
-            //POST für evaluation
+            closeVideoCall();
+            //POST for evaluation
             const data = {
                 userId: the_userId,
                 missionId: the_missionId,
                 transcriptId: the_transcriptId
             }
-            console.log("sending the request");
             const the_evaluation = await createYourEvaluation_req(data);
-            window.location.assign(`/evaluation/${the_evaluation._id}`);
-
-            // const evaluationInput = {
-            //     topicLev2: the_topic_level2,
-            //     missionWords: the_mission_words
-            // }
-            // getEvaluationInstance_req().then((the_eval_id) => {
-            //     console.log(the_eval_id)
-            //window.location.assign(`/evaluation/${the_eval_id}`);
-            // })
-
-            //max 1 minute call
-        }, 60000);
+            deleteMatchInfo_req();
+            window.location.assign(`../../evaluation/${the_evaluation._id}`);
+            //max 10 minutes call 10 * 60s
+        }, 600000);
+    }
+    if (peerConnection.connectionState == 'disconnected') {
+        deleteMatchInfo_req();
+        closeVideoCall();
+        recognition.stop();
+        updateUserTranscripts_req(spokenFromSession);
+        //POST for evaluation
+        const data = {
+            userId: the_userId,
+            missionId: the_missionId,
+            transcriptId: the_transcriptId
+        }
+        const the_evaluation = await createYourEvaluation_req(data);
+        window.location.assign(`../../evaluation/${the_evaluation._id}`);
     }
 }
 
@@ -80,7 +81,7 @@ setTimeout(() => {
         alert("Your match left.");
         deleteMatchInfo_req();
         closeVideoCall();
-        window.location.replace(`/home`);
+        window.location.replace(`../../home`);
     }
     // 20 seconds
 }, 20000);
@@ -91,6 +92,16 @@ const finish_call_btn = document.getElementById('js-finish-call');
 finish_call_btn.addEventListener("click", async (e) => {
     deleteMatchInfo_req();
     closeVideoCall();
+    recognition.stop();
+    updateUserTranscripts_req(spokenFromSession);
+    //POST for evaluation
+    const data = {
+        userId: the_userId,
+        missionId: the_missionId,
+        transcriptId: the_transcriptId
+    }
+    const the_evaluation = await createYourEvaluation_req(data);
+    window.location.assign(`../../evaluation/${the_evaluation._id}`);
 });
 
 let dataChannel;
@@ -107,7 +118,7 @@ remoteVideo.addEventListener('loadedmetadata', function () {
     console.log(`Remote video videoWidth: ${this.videoWidth}px,  videoHeight: ${this.videoHeight}px`);
 });
 
-//1. First start sharing media
+//First start sharing media
 
 async function startMediaSharing() {
 
@@ -123,6 +134,7 @@ async function startMediaSharing() {
         peerConnection.addTrack(track, localStream);
     });
     localVideo.srcObject = localStream_toDisplay;
+    localVideo.msHorizontalMirror = true;
 
     peerConnection.ontrack = function (event) {
         console.log('track received');
@@ -130,16 +142,14 @@ async function startMediaSharing() {
             remoteStream.addTrack(track);
         })
         remoteVideo.srcObject = remoteStream;
+        remoteVideo.msHorizontalMirror = true;
     }
 }
 await startMediaSharing();
 
 
 //-------------------Speech Recognition
-
-
 const SpeechRecognition = window.speechRecognition || window.webkitSpeechRecognition;
-// const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 // create a SpeechRecognition object
 const recognition = new SpeechRecognition();
 // set the language to english
@@ -161,15 +171,14 @@ recognition.onresult = function (event) {
     // .transcript = read-only, returns a string containing the transcript of the recognized word
     var transcript = event.results[current][0].transcript;
     spokenFromSession.transcriptSentences.push(transcript);
-    console.log(spokenFromSession.transcriptSentences);
 
+    transcriptTxtBox.innerText = spokenFromSession.transcriptSentences;
     //After 5 sentences restart the speech recognition, because speech recognition cannot record longer than 5 mins.
     //This is to prevent errors.
     if (numberSentancesSpoken % 5 == 0) {
         //save the words in json object through the web server
         updateUserTranscripts_req(spokenFromSession);
         spokenFromSession.transcriptSentences = [];
-
     }
 }
 
@@ -195,16 +204,15 @@ recognition.onspeechend = function () {
 
 const matchInfo = await readMyMatchInfo_req();
 
-//Im am user 1 and i have my own tasks
+//I am user 1 and i have my own tasks
 if (the_userId == matchInfo.user1_id) {
     console.log('User1-creating an offer');
     await createOffer_user1(updateMatchInfo_req);
     await displayMissionDataWhenReady();
-
     await processAnswerWhenReady_user1();
 }
 
-//Im am user 2 and i have my own tasks
+//I am user 2 and i have my own tasks
 if (the_userId == matchInfo.user2_id) {
     const missionInput = {
         topic: the_topic_level1,
@@ -250,7 +258,7 @@ async function createOffer_user1(callback) {
     setTimeout(() => {
         console.log('PUT OFFER');
         callback({ user1_offer: peerConnection.localDescription });
-        // 2000 -> 1500    
+        // latency improvement, 2000 -> 1500    
     }, 1500)
     return offer;
 }
@@ -269,7 +277,7 @@ async function processOfferWhenReady_user2() {
             console.log('staring processOfferWhenReady_user2 again')
             await processOfferWhenReady_user2()
         }
-        // 500 -> 100    
+        // latency improvement, 500 -> 100    
     }, 100)
     return -1;
 }
@@ -285,7 +293,7 @@ async function createAnswerAndConnect_user2(offer, callback) {
         setTimeout(() => {
             console.log("PUT ANSWER");
             callback({ user2_answer: peerConnection.localDescription });
-            // 2000 -> 1500      
+            // latency improvement, 2000 -> 1500      
         }, 1500)
     };
     const remoteDesc = new RTCSessionDescription(offer);
@@ -310,7 +318,7 @@ async function processAnswerWhenReady_user1() {
             console.log('staring processAnswerWhenReady_user1 again')
             await processAnswerWhenReady_user1()
         }
-        // 500 -> 100    
+        // latency improvement, 500 -> 100    
     }, 100)
     return -1;
 }
@@ -324,6 +332,7 @@ async function readMyMatchInfo_req() {
     });
     return response.json();
 }
+
 async function updateMatchInfo_req(data) {
     console.log('in updateMatchInfo_req')
     const response = await fetch(`${serverURL_MatchService}/matches/${the_match_id}`, {
@@ -402,7 +411,6 @@ async function getEvaluationInstance_req() {
     return response.json();
 }
 
-
 function closeVideoCall() {
     if (peerConnection) {
         peerConnection.ontrack = null;
@@ -420,8 +428,37 @@ function closeVideoCall() {
         if (localVideo.srcObject) {
             localVideo.srcObject.getTracks().forEach(track => track.stop());
         }
-        //alert('Call ended.');
+        //Call ended
         peerConnection.close();
         peerConnection = null;
     }
+}
+
+// ~~~~~~~~~~~~~~~~~~~~Countdown Clock~~~~~~~~~~~~~~~~~~~~
+function startCountdown() {
+    const countDownDate = new Date();
+    countDownDate.setMinutes(countDownDate.getMinutes() + 10);
+    setInterval(function () {
+
+        // Get today's date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output the result in an element with id="demo"
+        document.getElementById("countdown-clock").innerHTML = "0" + minutes + " : " + seconds;
+
+        // If the count down is over, write some text 
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdown-clock").innerHTML = "END";
+        }
+    }, 1000);
 }
