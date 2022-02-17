@@ -12,6 +12,8 @@ const transcriptTxtBox = document.getElementById('js-speech-ul');
 const the_match_id = window.location.pathname.split('/')[3];
 const the_userId = window.localStorage.userId;
 const the_topic_level1 = window.location.pathname.split('/')[2];
+console.log("the_topic_level1: ",the_topic_level1)
+console.log("the_match_id: ",the_match_id)
 let the_transcriptId;
 let the_missionId;
 let the_topic_level2;
@@ -238,6 +240,7 @@ if (the_userId == matchInfo.user2_id) {
         user2_id: matchInfo.user2_id,
         match_id: the_match_id
     }
+    console.log(missionInput);
     await createMission_user2_req(missionInput);
     await displayMissionDataWhenReady();
     //User 2 Processing Offer
@@ -397,6 +400,7 @@ async function createMission_user2_req(data) {
         headers: headers,
         body: JSON.stringify(data)
     });
+    console.log(response.json())
     return response.json();
     } catch (error) {
         console.log(error);
