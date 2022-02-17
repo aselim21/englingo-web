@@ -241,7 +241,8 @@ if (the_userId == matchInfo.user2_id) {
         match_id: the_match_id
     }
     console.log(missionInput);
-    await createMission_user2_req(missionInput);
+    const mission_id_res = await createMission_user2_req(missionInput);
+    console.log(mission_id_res);
     await displayMissionDataWhenReady();
     //User 2 Processing Offer
     await processOfferWhenReady_user2();
@@ -400,7 +401,6 @@ async function createMission_user2_req(data) {
         headers: headers,
         body: JSON.stringify(data)
     });
-    console.log(response.json())
     return response.json();
     } catch (error) {
         console.log(error);
