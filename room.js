@@ -1,3 +1,4 @@
+// const serverURL_rooms = 'http://localhost:3000';
 const serverURL_MatchService = 'https://webrtc-englingo.herokuapp.com';
 const serverURL_MissionService = 'https://englingo-missions.herokuapp.com';
 const serverURL_EvaluationService = 'https://englingo-evaluations.herokuapp.com';
@@ -11,6 +12,8 @@ const transcriptTxtBox = document.getElementById('js-speech-ul');
 const the_match_id = window.location.pathname.split('/')[3];
 const the_userId = window.localStorage.userId;
 const the_topic_level1 = window.location.pathname.split('/')[2];
+console.log("the_topic_level1: ",the_topic_level1)
+console.log("the_match_id: ",the_match_id)
 let the_transcriptId;
 let the_missionId;
 let the_topic_level2;
@@ -19,6 +22,8 @@ let spokenFromSession = {
     userId: the_userId,
     transcriptSentences: [],
     missionId: the_missionId
+    // topicLev2: the_topic_level2,
+    // missionWords: the_mission_words
 };
 
 const configuration = {
@@ -36,7 +41,8 @@ let peerConnection = new RTCPeerConnection({ configuration: configuration, iceSe
 //Monitor the state of the Peer Connection
 peerConnection.onconnectionstatechange = async function (event) {
     console.log('State changed ' + peerConnection.connectionState);
-    //Start Speech recognition when connectionState == connected
+    //Start Speech recognition wenn connectionState == connected
+
     if (peerConnection.connectionState == 'connected') {
         recognition.start();
         startCountdown();
@@ -47,7 +53,7 @@ peerConnection.onconnectionstatechange = async function (event) {
             recognition.stop();
             updateUserTranscripts_req(spokenFromSession);
             closeVideoCall();
-            //POST for evaluation
+            //POST für evaluation
             const data = {
                 userId: the_userId,
                 missionId: the_missionId,
@@ -56,22 +62,32 @@ peerConnection.onconnectionstatechange = async function (event) {
             const the_evaluation = await createYourEvaluation_req(data);
             deleteMatchInfo_req();
             window.location.assign(`../../evaluation/${the_evaluation._id}`);
+
+            // const evaluationInput = {
+            //     topicLev2: the_topic_level2,
+            //     missionWords: the_mission_words
+            // }
+            // getEvaluationInstance_req().then((the_eval_id) => {
+            //     console.log(the_eval_id)
+            //window.location.assign(`/evaluation/${the_eval_id}`);
+            // })
+
             //max 10 minutes call 10 * 60s
         }, 600000);
     }
-    if (peerConnection.connectionState == 'disconnected') {
+    if (peerConnection.connectionState == 'disconnected'){
         deleteMatchInfo_req();
-        closeVideoCall();
-        recognition.stop();
-        updateUserTranscripts_req(spokenFromSession);
-        //POST for evaluation
-        const data = {
-            userId: the_userId,
-            missionId: the_missionId,
-            transcriptId: the_transcriptId
-        }
-        const the_evaluation = await createYourEvaluation_req(data);
-        window.location.assign(`../../evaluation/${the_evaluation._id}`);
+    closeVideoCall();
+    recognition.stop();
+    updateUserTranscripts_req(spokenFromSession);
+    //POST für evaluation
+    const data = {
+        userId: the_userId,
+        missionId: the_missionId,
+        transcriptId: the_transcriptId
+    }
+    const the_evaluation = await createYourEvaluation_req(data);
+    window.location.assign(`../../evaluation/${the_evaluation._id}`);
     }
 }
 
@@ -94,7 +110,7 @@ finish_call_btn.addEventListener("click", async (e) => {
     closeVideoCall();
     recognition.stop();
     updateUserTranscripts_req(spokenFromSession);
-    //POST for evaluation
+    //POST für evaluation
     const data = {
         userId: the_userId,
         missionId: the_missionId,
@@ -118,7 +134,7 @@ remoteVideo.addEventListener('loadedmetadata', function () {
     console.log(`Remote video videoWidth: ${this.videoWidth}px,  videoHeight: ${this.videoHeight}px`);
 });
 
-//First start sharing media
+//1. First start sharing media
 
 async function startMediaSharing() {
 
@@ -149,7 +165,10 @@ await startMediaSharing();
 
 
 //-------------------Speech Recognition
+
+
 const SpeechRecognition = window.speechRecognition || window.webkitSpeechRecognition;
+// const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 // create a SpeechRecognition object
 const recognition = new SpeechRecognition();
 // set the language to english
@@ -171,7 +190,7 @@ recognition.onresult = function (event) {
     // .transcript = read-only, returns a string containing the transcript of the recognized word
     var transcript = event.results[current][0].transcript;
     spokenFromSession.transcriptSentences.push(transcript);
-
+  
     transcriptTxtBox.innerText = spokenFromSession.transcriptSentences;
     //After 5 sentences restart the speech recognition, because speech recognition cannot record longer than 5 mins.
     //This is to prevent errors.
@@ -204,15 +223,16 @@ recognition.onspeechend = function () {
 
 const matchInfo = await readMyMatchInfo_req();
 
-//I am user 1 and i have my own tasks
+//Im am user 1 and i have my own tasks
 if (the_userId == matchInfo.user1_id) {
     console.log('User1-creating an offer');
     await createOffer_user1(updateMatchInfo_req);
     await displayMissionDataWhenReady();
+
     await processAnswerWhenReady_user1();
 }
 
-//I am user 2 and i have my own tasks
+//Im am user 2 and i have my own tasks
 if (the_userId == matchInfo.user2_id) {
     const missionInput = {
         topic: the_topic_level1,
@@ -220,7 +240,9 @@ if (the_userId == matchInfo.user2_id) {
         user2_id: matchInfo.user2_id,
         match_id: the_match_id
     }
-    await createMission_user2_req(missionInput);
+    console.log(missionInput);
+    const mission_id_res = await createMission_user2_req(missionInput);
+    console.log(mission_id_res);
     await displayMissionDataWhenReady();
     //User 2 Processing Offer
     await processOfferWhenReady_user2();
@@ -258,7 +280,7 @@ async function createOffer_user1(callback) {
     setTimeout(() => {
         console.log('PUT OFFER');
         callback({ user1_offer: peerConnection.localDescription });
-        // latency improvement, 2000 -> 1500    
+        // 2000 -> 1500    
     }, 1500)
     return offer;
 }
@@ -277,7 +299,7 @@ async function processOfferWhenReady_user2() {
             console.log('staring processOfferWhenReady_user2 again')
             await processOfferWhenReady_user2()
         }
-        // latency improvement, 500 -> 100    
+        // 500 -> 100    
     }, 100)
     return -1;
 }
@@ -293,7 +315,7 @@ async function createAnswerAndConnect_user2(offer, callback) {
         setTimeout(() => {
             console.log("PUT ANSWER");
             callback({ user2_answer: peerConnection.localDescription });
-            // latency improvement, 2000 -> 1500      
+            // 2000 -> 1500      
         }, 1500)
     };
     const remoteDesc = new RTCSessionDescription(offer);
@@ -318,7 +340,7 @@ async function processAnswerWhenReady_user1() {
             console.log('staring processAnswerWhenReady_user1 again')
             await processAnswerWhenReady_user1()
         }
-        // latency improvement, 500 -> 100    
+        // 500 -> 100    
     }, 100)
     return -1;
 }
@@ -332,7 +354,6 @@ async function readMyMatchInfo_req() {
     });
     return response.json();
 }
-
 async function updateMatchInfo_req(data) {
     console.log('in updateMatchInfo_req')
     const response = await fetch(`${serverURL_MatchService}/matches/${the_match_id}`, {
@@ -374,12 +395,18 @@ async function updateUserTranscripts_req(data) {
 }
 
 async function createMission_user2_req(data) {
-    const response = await fetch(`${serverURL_MissionService}/missions`, {
+    try {
+     const response = await fetch(`${serverURL_MissionService}/missions`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
     });
-    return response.json;
+    return response.json();
+    } catch (error) {
+        console.log(error);
+        return -1;
+    }
+    
 }
 
 async function readMissionToMatchId_req() {
@@ -411,6 +438,7 @@ async function getEvaluationInstance_req() {
     return response.json();
 }
 
+
 function closeVideoCall() {
     if (peerConnection) {
         peerConnection.ontrack = null;
@@ -428,7 +456,7 @@ function closeVideoCall() {
         if (localVideo.srcObject) {
             localVideo.srcObject.getTracks().forEach(track => track.stop());
         }
-        //Call ended
+        //alert('Call ended.');
         peerConnection.close();
         peerConnection = null;
     }
