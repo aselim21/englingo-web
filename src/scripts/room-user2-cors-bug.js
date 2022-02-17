@@ -391,18 +391,12 @@ async function updateUserTranscripts_req(data) {
 }
 
 async function createMission_user2_req(data) {
-    try {
-     const response = await fetch(`${serverURL_MissionService}/missions`, {
+    const response = await fetch(`${serverURL_MissionService}/missions`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
     });
-    return response.json();
-    } catch (error) {
-        console.log(error);
-        return -1;
-    }
-    
+    return response.json;
 }
 
 async function readMissionToMatchId_req() {
