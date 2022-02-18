@@ -14,11 +14,11 @@ window.localStorage.setItem('userId', `englingo_user${Math.floor(Math.random() *
 userId = window.localStorage.userId;
 }
 //Topic buttons
-const list_of_topic_btns = document.getElementById('js-topic-buttons');
+const list_of_topic_btns = document.getElementsByClassName('js-topic-button');
 
 //attach event listener to all Topic Buttons
-for (let index = 0; index < list_of_topic_btns.children.length; index++) {
-    const element = list_of_topic_btns.children[index];
+for (let index = 0; index < list_of_topic_btns.length; index++) {
+    const element = list_of_topic_btns[index];
     element.addEventListener("click", async (e) => {
         deactivateOtherButtons(e.currentTarget);
         const topic_name = e.srcElement.getAttribute('topic');
@@ -26,14 +26,14 @@ for (let index = 0; index < list_of_topic_btns.children.length; index++) {
             userId: userId,
             topic: topic_name
         }
-        createParticipant_req(data).then(() => {
-            findMatch(topic_name);
-        });
+        // createParticipant_req(data).then(() => {
+        //     findMatch(topic_name);
+        // });
     }); 
 }
 function deactivateOtherButtons(the_except_btn){
-    for (let index = 0; index < list_of_topic_btns.children.length; index++) {
-        const element = list_of_topic_btns.children[index];
+    for (let index = 0; index < list_of_topic_btns.length; index++) {
+        const element = list_of_topic_btns[index];
         if(element != the_except_btn){
             element.disabled = true;
         }
