@@ -63,14 +63,14 @@ peerConnection.onconnectionstatechange = async function (event) {
             deleteMatchInfo_req();
             window.location.assign(`../../evaluation/${the_evaluation._id}`);
 
-            // const evaluationInput = {
-            //     topicLev2: the_topic_level2,
-            //     missionWords: the_mission_words
-            // }
-            // getEvaluationInstance_req().then((the_eval_id) => {
-            //     console.log(the_eval_id)
-            //window.location.assign(`/evaluation/${the_eval_id}`);
-            // })
+            const evaluationInput = {
+                topicLev2: the_topic_level2,
+                missionWords: the_mission_words
+            }
+            getEvaluationInstance_req().then((the_eval_id) => {
+                console.log(the_eval_id)
+            window.location.assign(`/evaluation/${the_eval_id}`);
+            })
 
             //max 10 minutes call 10 * 60s
         }, 600000);

@@ -26,9 +26,9 @@ for (let index = 0; index < list_of_topic_btns.length; index++) {
             userId: userId,
             topic: topic_name
         }
-        // createParticipant_req(data).then(() => {
-        //     findMatch(topic_name);
-        // });
+        createParticipant_req(data).then(() => {
+            findMatch(topic_name);
+        });
     }); 
 }
 function deactivateOtherButtons(the_except_btn){
