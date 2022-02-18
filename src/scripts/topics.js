@@ -59,8 +59,7 @@ async function createParticipant_req(data) {
     const response = await fetch(`${serverURL_MatchService}/participant`, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(data),
-        mode: 'cors'
+        body: JSON.stringify(data)
     });
     return response;
 }
