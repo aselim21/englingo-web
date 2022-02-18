@@ -4,14 +4,16 @@ const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
 headers.append("Access-Control-Allow-Credentials", "true");
+headers.append("Access-Control-Allow-Origin", '*');
 headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Credentials, Access-Control-Allow-Methods, Cookie, Set-Cookie, Authorization');
 headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
 
+
 //Create userId
 let userId = window.localStorage.userId;
-if(!userId){
-window.localStorage.setItem('userId', `englingo_user${Math.floor(Math.random() * 10000000)}`);
-userId = window.localStorage.userId;
+if (!userId) {
+    window.localStorage.setItem('userId', `englingo_user${Math.floor(Math.random() * 10000000)}`);
+    userId = window.localStorage.userId;
 }
 //Topic buttons
 const list_of_topic_btns = document.getElementsByClassName('js-topic-button');
@@ -29,12 +31,12 @@ for (let index = 0; index < list_of_topic_btns.length; index++) {
         createParticipant_req(data).then(() => {
             findMatch(topic_name);
         });
-    }); 
+    });
 }
-function deactivateOtherButtons(the_except_btn){
+function deactivateOtherButtons(the_except_btn) {
     for (let index = 0; index < list_of_topic_btns.length; index++) {
         const element = list_of_topic_btns[index];
-        if(element != the_except_btn){
+        if (element != the_except_btn) {
             element.disabled = true;
         }
     }
@@ -47,7 +49,7 @@ async function findMatch(the_topic) {
         console.log('searching...');
         setTimeout(async function () {
             await findMatch(the_topic);
-        // 5000 -> 100    
+            // 5000 -> 100    
         }, 100)
     } else {
         //TODO: Create a Mission here - Audit 4
@@ -60,7 +62,8 @@ async function createParticipant_req(data) {
     const response = await fetch(`${serverURL_MatchService}/participant`, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        mode: 'cors'
     });
     return response;
 }
@@ -68,7 +71,8 @@ async function createParticipant_req(data) {
 async function readMatchID_req() {
     const response = await fetch(`${serverURL_MatchService}/matches/participants/${userId}`, {
         method: 'GET',
-        headers: headers
+        headers: headers,
+        mode: 'cors'
     });
     return response.json();
 }
