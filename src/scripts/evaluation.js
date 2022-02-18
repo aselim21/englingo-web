@@ -3,9 +3,6 @@ const serverURL_EvaluationService = 'https://englingo-evaluations.herokuapp.com'
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
-headers.append("Access-Control-Allow-Credentials", "true");
-headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Credentials, Cookie, Set-Cookie, Authorization');
-headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
 const the_evaluation_id = window.location.pathname.split('/')[2]; 
 
 const evaluationInfo = await readMyEvaluation_req(the_evaluation_id);
@@ -25,7 +22,9 @@ evaluationInfo.missionWordsEvaluated.forEach(element => {
 async function readMyEvaluation_req(the_id) {
     const response = await fetch(`${serverURL_EvaluationService}/evaluations/${the_id}`, {
         method: 'GET',
-        headers: headers
+        headers: headers,
+        mode: 'cors',
+        credentials: 'include'
     });
     return response.json();
 }

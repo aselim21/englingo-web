@@ -5,9 +5,6 @@ const serverURL_EvaluationService = 'https://englingo-evaluations.herokuapp.com'
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
-headers.append("Access-Control-Allow-Credentials", "true");
-headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Credentials, Access-Control-Allow-Methods, Cookie, Set-Cookie, Authorization');
-headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
 const transcriptTxtBox = document.getElementById('js-speech-ul');
 const the_match_id = window.location.pathname.split('/')[3];
 const the_userId = window.localStorage.userId;
@@ -350,7 +347,9 @@ async function readMyMatchInfo_req() {
     console.log('in readMyMatchInfo_req');
     const response = await fetch(`${serverURL_MatchService}/matches/${the_match_id}`, {
         method: 'GET',
-        headers: headers
+        headers: headers,
+        mode: 'cors',
+        credentials: 'include'
     });
     return response.json();
 }
@@ -359,7 +358,9 @@ async function updateMatchInfo_req(data) {
     const response = await fetch(`${serverURL_MatchService}/matches/${the_match_id}`, {
         method: 'PUT',
         headers: headers,
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        mode: 'cors',
+        credentials: 'include'
     });
     return response.json();
 };
@@ -367,7 +368,9 @@ async function updateMatchInfo_req(data) {
 async function deleteMatchInfo_req() {
     const response = await fetch(`${serverURL_MatchService}/matches/${the_match_id}`, {
         method: 'DELETE',
-        headers: headers
+        headers: headers,
+        mode: 'cors',
+        credentials: 'include'
     });
     return response;
 };
@@ -376,7 +379,9 @@ async function createUserTranscripts_req(data) {
     const response = await fetch(`${serverURL_EvaluationService}/userTranscripts`, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        mode: 'cors',
+        credentials: 'include'
     });
     return response.json();
 }
@@ -386,7 +391,9 @@ async function updateUserTranscripts_req(data) {
         const response = await fetch(`${serverURL_EvaluationService}/userTranscripts/${the_transcriptId}`, {
             method: 'PUT',
             headers: headers,
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            mode: 'cors',
+            credentials: 'include'
         });
         return response;
     } catch (error) {
@@ -399,7 +406,9 @@ async function createMission_user2_req(data) {
      const response = await fetch(`${serverURL_MissionService}/missions`, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        mode: 'cors',
+        credentials: 'include'
     });
     return response.json();
     } catch (error) {
@@ -412,7 +421,9 @@ async function createMission_user2_req(data) {
 async function readMissionToMatchId_req() {
     const response = await fetch(`${serverURL_MissionService}/missions/match/${the_match_id}`, {
         method: 'GET',
-        headers: headers
+        headers: headers,
+        mode: 'cors',
+        credentials: 'include'
     });
     return response.json();
 }
@@ -422,7 +433,9 @@ async function createYourEvaluation_req(data) {
         const response = await fetch(`${serverURL_EvaluationService}/evaluations`, {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            mode: 'cors',
+            credentials: 'include'
         });
         return response.json();
     } catch (error) {
@@ -433,7 +446,9 @@ async function createYourEvaluation_req(data) {
 async function getEvaluationInstance_req() {
     const response = await fetch(`/myEvaluation`, {
         method: 'GET',
-        headers: headers
+        headers: headers,
+        mode: 'cors',
+        credentials: 'include'
     });
     return response.json();
 }
