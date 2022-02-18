@@ -72,7 +72,9 @@ async function createParticipant_req(data) {
 async function readMatchID_req() {
     const response = await fetch(`${serverURL_MatchService}/matches/participants/${userId}`, {
         method: 'GET',
-        headers: headers
+        headers: headers,
+        mode: 'cors',
+        credentials: 'include'
     });
     return response.json();
 }
