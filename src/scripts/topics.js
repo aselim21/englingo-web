@@ -11,7 +11,7 @@ headers.append('Accept', 'application/json');
 //     userId = window.localStorage.userId;
 // }
 window.localStorage.setItem('userId', `englingo_user${Math.floor(Math.random() * 10000000)}`);
-userId = window.localStorage.userId;
+const userId = window.localStorage.userId;
 //Topic buttons
 const list_of_topic_btns = document.getElementsByClassName('js-topic-button');
 
