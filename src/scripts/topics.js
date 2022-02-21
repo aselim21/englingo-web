@@ -1,10 +1,8 @@
+// const serverURL_rooms = 'http://localhost:3000';
 const serverURL_MatchService = 'https://webrtc-englingo.herokuapp.com';
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
-headers.append("Access-Control-Allow-Credentials", "true");
-headers.append("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Credentials, Access-Control-Allow-Methods, Cookie, Set-Cookie, Authorization');
-headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, HEAD');
 
 //Create userId
 let userId = window.localStorage.userId;
@@ -30,7 +28,6 @@ for (let index = 0; index < list_of_topic_btns.length; index++) {
         });
     });
 }
-
 function deactivateOtherButtons(the_except_btn) {
     for (let index = 0; index < list_of_topic_btns.length; index++) {
         const element = list_of_topic_btns[index];
@@ -39,7 +36,6 @@ function deactivateOtherButtons(the_except_btn) {
         }
     }
 }
-
 //Keep asking for a match; If there is one, then open the room
 async function findMatch(the_topic) {
     let match_id;
@@ -51,6 +47,7 @@ async function findMatch(the_topic) {
             // 5000 -> 100    
         }, 100)
     } else {
+        //TODO: Create a Mission here - Audit 4
         window.location.assign(`/rooms/${the_topic}/${match_id}`);
     }
 }
@@ -60,7 +57,9 @@ async function createParticipant_req(data) {
     const response = await fetch(`${serverURL_MatchService}/participant`, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        mode: 'cors',
+        credentials: 'include'
     });
     return response;
 }
@@ -68,7 +67,10 @@ async function createParticipant_req(data) {
 async function readMatchID_req() {
     const response = await fetch(`${serverURL_MatchService}/matches/participants/${userId}`, {
         method: 'GET',
-        headers: headers
+        headers: headers,
+        mode: 'cors',
+        credentials: 'include'
     });
     return response.json();
 }
+
