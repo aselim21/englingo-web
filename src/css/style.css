@@ -258,12 +258,16 @@ button:active {
     background-color: var(--color-camera-box1);
     width: var(--xxxl);
     margin-left: -15%;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
 }
 #webcamVideo{  
     position: initial;
     background-color: var(--color-camera-box2);
     width: var(--l3);
     margin-left: -15%;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
      
 }
  

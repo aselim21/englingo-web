@@ -147,7 +147,6 @@ async function startMediaSharing() {
         peerConnection.addTrack(track, localStream);
     });
     localVideo.srcObject = localStream_toDisplay;
-    localVideo.msHorizontalMirror = true;
 
     peerConnection.ontrack = function (event) {
         console.log('track received');
@@ -155,7 +154,6 @@ async function startMediaSharing() {
             remoteStream.addTrack(track);
         })
         remoteVideo.srcObject = remoteStream;
-        remoteVideo.msHorizontalMirror = true;
     }
 }
 await startMediaSharing();
