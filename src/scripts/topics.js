@@ -5,11 +5,13 @@ headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
 
 //Create userId
-let userId = window.localStorage.userId;
-if (!userId) {
-    window.localStorage.setItem('userId', `englingo_user${Math.floor(Math.random() * 10000000)}`);
-    userId = window.localStorage.userId;
-}
+// let userId = window.localStorage.userId;
+// if (!userId) {
+//     window.localStorage.setItem('userId', `englingo_user${Math.floor(Math.random() * 10000000)}`);
+//     userId = window.localStorage.userId;
+// }
+window.localStorage.setItem('userId', `englingo_user${Math.floor(Math.random() * 10000000)}`);
+userId = window.localStorage.userId;
 //Topic buttons
 const list_of_topic_btns = document.getElementsByClassName('js-topic-button');
 
