@@ -1,4 +1,3 @@
-import { StayPrimaryLandscape } from "@mui/icons-material";
 import { Grid, Typography, Box } from "@mui/material";
 
 export function Footer() {

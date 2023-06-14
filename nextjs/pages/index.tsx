@@ -1,6 +1,9 @@
 import Head from 'next/head';
-import { Header }  from "../components/Header";
-import { Footer }  from "../components/Footer";
+import { Header } from "../components/Header";
+import { Footer } from "../components/Footer";
+import { Welcome } from "../components/Welcome";
+import theme from "../utils/theme";
+import { ThemeProvider, CssBaseline } from "@mui/material";
 
 export default function Home() {
     return (
@@ -10,18 +13,21 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <Header />
+            <ThemeProvider theme={theme}>
+                <CssBaseline enableColorScheme />
+                <Header />
 
-            <main>
-                {/* !!!!!!!!!!!!!CONTENT!!!!!!!!!!! */}
-                <h1>
-                    Welcome to <a href="https://nextjs.org">Next.js!</a>
-                </h1>
-                
-            </main>
+                <main>
 
-            <Footer/>
-            
+
+                    <Welcome />
+
+
+                </main>
+
+                <Footer />
+            </ThemeProvider>
+
         </>
     )
 }

@@ -1,14 +1,44 @@
 import * as React from 'react';
 // import TrendingUp from '@mui/icons-material/TrendingUp';
-import { Box, Button, Typography } from '@mui/material';
-import { ThemeProvider, CssBaseline } from "@mui/material";
-import theme from "../utils/theme";
+import {
+    Box,
+    Button,
+    Typography,
+    Avatar,
+    CssBaseline,
+    ThemeProvider,
+    Grid,
+    Paper,
+    Grow,
+    Popper,
+    MenuItem,
+    MenuList,
+    ClickAwayListener
+} from '@mui/material';
 
 
 export function Header() {
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleToggle = () => {
+        setOpen((prevOpen) => !prevOpen);
+    };
+    const anchorRef = React.useRef<HTMLButtonElement>(null);
+
+    const handleClose = (event: Event | React.SyntheticEvent) => {
+        if (
+            anchorRef.current &&
+            anchorRef.current.contains(event.target as HTMLElement)
+        ) {
+            return;
+        }
+
+        setOpen(false);
+    };
+
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline enableColorScheme />
+        <>
             <Box
                 sx={{
                     bgcolor: 'primary.main',
@@ -17,46 +47,91 @@ export function Header() {
                     mx: 0,
                 }}
             >
-                <Typography sx={{
-                    mx: 5
-                }}
-                    variant="logo">
-                        Englingo
-                </Typography>
+                <Grid container
+                    spacing={2}
+                    justifyContent="space-between"
+                    alignItems="center"
+                >
+                    {/* ---------------------------------------------------------Englingo Logo-------------------------------------------------------------------- */}
+                    <Grid item >
+
+                        <Typography
+                            sx={{
+                                mx: 5,
+                                fontSize: 40
+                            }}
+                            variant="logo"
+                        >
+                            Englingo
+                        </Typography>
+
+                    </Grid>
+
+                    <Grid item >
+
+                        {/* -----------------------------------------------------------Avatar------------------------------------------------------------------ */}
+                        <Button
+                            ref={anchorRef}
+                            id="composition-button"
+                            aria-controls={open ? 'composition-menu' : undefined}
+                            aria-expanded={open ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={handleToggle}
+                            sx={{
+                                right: 0,
+                                mx: 5,
+                            }}
+                        >
+                            <Avatar
+                                alt="User"
+                                src="https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"
+                            />
+                        </Button>
+
+                        {/* ---------------------------------------------------------Popping Menu-------------------------------------------------------------------- */}
+                        <Popper
+                            open={open}
+                            anchorEl={anchorRef.current}
+                            role={undefined}
+                            placement="bottom-start"
+                            transition
+                            disablePortal
+                        >
+                            {({ TransitionProps, placement }) => (
+                                <Grow
+                                    {...TransitionProps}
+                                    style={{
+                                        transformOrigin:
+                                            placement === 'bottom-start' ? 'left top' : 'left bottom',
+                                    }}
+                                >
+                                    <Paper>
+                                        <ClickAwayListener onClickAway={handleClose}>
+                                            <MenuList
+                                                autoFocusItem={open}
+                                                id="composition-menu"
+                                                aria-labelledby="composition-button"
+                                            // onKeyDown={handleListKeyDown}
+                                            >
+                                                {/* ---------------------------------------------------------ACH - TODO-------------------------------------------------------------------- */}
+                                                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                                <MenuItem onClick={handleClose}>My account</MenuItem>
+                                                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                                            </MenuList>
+                                        </ClickAwayListener>
+                                    </Paper>
+                                </Grow>
+                            )}
+                        </Popper>
+
+                    </Grid>
+                </Grid>
+
+
+
 
             </Box>
 
-            <Button variant="contained" color="secondary">
-                Button
-            </Button>
-        </ThemeProvider>
-        // <Box
-        //   sx={{
-        //     bgcolor: 'background.paper',
-        //     boxShadow: 1,
-        //     borderRadius: 1,
-        //     p: 2,
-        //     minWidth: 300,
-        //   }}
-        // >
-        //   <Box sx={{ color: 'text.secondary' }}>Sessions</Box>
-        //   <Box sx={{ color: 'text.primary', fontSize: 34, fontWeight: 'medium' }}>
-        //     98.3 K
-        //   </Box>
-
-        //   <Box
-        //     sx={{
-        //       color: 'success.dark',
-        //       display: 'inline',
-        //       fontWeight: 'medium',
-        //       mx: 0.5,
-        //     }}
-        //   >
-        //     18.77%
-        //   </Box>
-        //   <Box sx={{ color: 'text.secondary', display: 'inline', fontSize: 12 }}>
-        //     vs. last week
-        //   </Box>
-        // </Box>
+        </>
     );
 }
